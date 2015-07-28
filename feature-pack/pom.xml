@@ -1949,6 +1949,14 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>com.barbon</groupId>
+            <artifactId>infinispan-cachestore-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-commons</artifactId>
         </dependency>

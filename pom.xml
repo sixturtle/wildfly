@@ -148,6 +148,7 @@
         <version.org.hibernate.search>5.4.0.Alpha1</version.org.hibernate.search>
         <version.org.hornetq>2.4.7.Final</version.org.hornetq>
         <version.org.infinispan>7.2.3.Final</version.org.infinispan>
+        <version.redis.clients.jedis>2.2.1</version.redis.clients.jedis>
         <version.org.jasypt>1.9.1</version.org.jasypt>
         <version.org.javassist>3.18.1-GA</version.org.javassist>
         <version.org.jberet>1.1.0.Final</version.org.jberet>
@@ -4192,6 +4193,16 @@
                         <artifactId>jboss-marshalling-osgi</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.barbon</groupId>
+                <artifactId>infinispan-cachestore-redis</artifactId>
+                <version>${version.org.infinispan}</version>
+            </dependency>
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${version.redis.clients.jedis}</version>
             </dependency>
             <dependency>
                 <groupId>org.infinispan</groupId>

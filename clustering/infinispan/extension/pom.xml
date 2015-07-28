@@ -106,6 +106,10 @@
             <artifactId>infinispan-cachestore-remote</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.barbon</groupId>
+            <artifactId>infinispan-cachestore-redis</artifactId>
+        </dependency>
+        <dependency>
             <groupId>net.jcip</groupId>
             <artifactId>jcip-annotations</artifactId>
         </dependency>
