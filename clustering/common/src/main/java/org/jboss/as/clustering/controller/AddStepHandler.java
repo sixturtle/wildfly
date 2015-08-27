@@ -22,18 +22,13 @@
 
 package org.jboss.as.clustering.controller;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.jboss.as.controller.AbstractAddStepHandler;
+import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
+import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.SimpleOperationDefinitionBuilder;
 import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
-import org.jboss.as.controller.descriptions.ResourceDescriptionResolver;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
 import org.jboss.as.controller.registry.OperationEntry;
 import org.jboss.as.controller.registry.Resource;
@@ -45,56 +40,66 @@ import org.jboss.dmr.ModelNode;
  */
 public class AddStepHandler extends AbstractAddStepHandler implements Registration {
 
-    private final ResourceDescriptionResolver resolver;
+    private final AddStepHandlerDescriptor descriptor;
     private final ResourceServiceHandler handler;
-    private final List<Attribute> attributes = new LinkedList<>();
 
-    public AddStepHandler(ResourceDescriptionResolver resolver, ResourceServiceHandler handler) {
-        this.resolver = resolver;
+    public AddStepHandler(AddStepHandlerDescriptor descriptor) {
+        this(descriptor, null);
+    }
+
+    public AddStepHandler(AddStepHandlerDescriptor descriptor, ResourceServiceHandler handler) {
+        super(descriptor.getAttributes());
+        this.descriptor = descriptor;
         this.handler = handler;
     }
 
-    public <E extends Enum<E> & Attribute> AddStepHandler addAttributes(Class<E> enumClass) {
-        return this.addAttributes(EnumSet.allOf(enumClass));
-    }
-
-    public AddStepHandler addAttributes(Attribute... attributes) {
-        return this.addAttributes(Arrays.asList(attributes));
-    }
-
-    public AddStepHandler addAttributes(Collection<? extends Attribute> attributes) {
-        this.attributes.addAll(attributes);
-        return this;
-    }
-
     @Override
-    protected void populateModel(OperationContext context, ModelNode operation, Resource resource) throws  OperationFailedException {
-        ModelNode model = resource.getModel();
-        for (Attribute attribute : this.attributes) {
-            attribute.getDefinition().validateAndSet(operation, model);
+    protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException {
+        for (AttributeDefinition definition : this.descriptor.getExtraParameters()) {
+            definition.validateOperation(operation);
         }
+        super.populateModel(operation, model);
     }
 
     @Override
     protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model) throws OperationFailedException {
-        this.handler.installServices(context, model);
+        if (this.handler != null) {
+            this.handler.installServices(context, model);
+        }
     }
 
     @Override
     protected void rollbackRuntime(OperationContext context, ModelNode operation, Resource resource) {
-        try {
-            this.handler.removeServices(context, resource.getModel());
-        } catch (OperationFailedException e) {
-            throw new IllegalStateException(e);
+        if (this.handler != null) {
+            try {
+                this.handler.removeServices(context, resource.getModel());
+            } catch (OperationFailedException e) {
+                throw new IllegalStateException(e);
+            }
         }
     }
 
     @Override
+    protected void recordCapabilitiesAndRequirements(OperationContext context, ModelNode operation, Resource resource) throws OperationFailedException {
+        PathAddress address = context.getCurrentAddress();
+        // The super implementation assumes that the capability name is a simple extension of the base name - we do not.
+        for (Capability capability : this.descriptor.getCapabilities()) {
+            context.registerCapability(capability.getRuntimeCapability(address), null);
+        }
+        super.recordCapabilitiesAndRequirements(context, operation, resource);
+    }
+
+    @Override
     public void register(ManagementResourceRegistration registration) {
-        SimpleOperationDefinitionBuilder builder = new SimpleOperationDefinitionBuilder(ModelDescriptionConstants.ADD, this.resolver).withFlag(OperationEntry.Flag.RESTART_NONE);
-        for (Attribute attribute : this.attributes) {
-            builder.addParameter(attribute.getDefinition());
+        SimpleOperationDefinitionBuilder builder = new SimpleOperationDefinitionBuilder(ModelDescriptionConstants.ADD, this.descriptor.getDescriptionResolver()).withFlag(OperationEntry.Flag.RESTART_NONE);
+        for (AttributeDefinition attribute : this.descriptor.getAttributes()) {
+            builder.addParameter(attribute);
+        }
+        for (AttributeDefinition parameter : this.descriptor.getExtraParameters()) {
+            builder.addParameter(parameter);
         }
         registration.registerOperationHandler(builder.build(), this);
+
+        new CapabilityRegistration(this.descriptor.getCapabilities()).register(registration);
     }
 }

@@ -23,6 +23,7 @@
 package org.jboss.as.clustering.infinispan.subsystem;
 
 import org.jboss.as.clustering.controller.AddStepHandler;
+import org.jboss.as.clustering.controller.ResourceDescriptor;
 import org.jboss.as.clustering.controller.RemoveStepHandler;
 import org.jboss.as.clustering.controller.ResourceServiceHandler;
 import org.jboss.as.controller.ModelVersion;
@@ -53,10 +54,12 @@ public class LocalCacheResourceDefinition extends CacheResourceDefinition {
         super(WILDCARD_PATH, pathManager, allowRuntimeOnlyRegistration);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void registerOperations(ManagementResourceRegistration registration) {
+        ResourceDescriptor descriptor = new ResourceDescriptor(this.getResourceDescriptionResolver()).addAttributes(CacheResourceDefinition.Attribute.class).addAttributes(CacheResourceDefinition.DeprecatedAttribute.class);
         ResourceServiceHandler handler = new LocalCacheServiceHandler();
-        new AddStepHandler(this.getResourceDescriptionResolver(), handler).addAttributes(CacheResourceDefinition.Attribute.class).register(registration);
-        new RemoveStepHandler(this.getResourceDescriptionResolver(), handler).register(registration);
+        new AddStepHandler(descriptor, handler).register(registration);
+        new RemoveStepHandler(descriptor, handler).register(registration);
     }
 }

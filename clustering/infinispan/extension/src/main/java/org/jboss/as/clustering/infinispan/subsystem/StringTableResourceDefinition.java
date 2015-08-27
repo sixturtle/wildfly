@@ -25,6 +25,7 @@ package org.jboss.as.clustering.infinispan.subsystem;
 import java.util.Arrays;
 
 import org.jboss.as.clustering.controller.AddStepHandler;
+import org.jboss.as.clustering.controller.ResourceDescriptor;
 import org.jboss.as.clustering.controller.Operations;
 import org.jboss.as.clustering.controller.ReloadRequiredWriteAttributeHandler;
 import org.jboss.as.clustering.controller.RemoveStepHandler;
@@ -89,7 +90,7 @@ public class StringTableResourceDefinition extends TableResourceDefinition {
                             }
                         }
                     }
-                    return value.isDefined() ? Operations.createWriteAttributeOperation(storeAddress, StringKeyedJDBCStoreResourceDefinition.Attribute.TABLE, value) : Operations.createUndefineAttributeOperation(storeAddress, StringKeyedJDBCStoreResourceDefinition.Attribute.TABLE);
+                    return value.isDefined() ? Operations.createWriteAttributeOperation(storeAddress, StringKeyedJDBCStoreResourceDefinition.DeprecatedAttribute.TABLE, value) : Operations.createUndefineAttributeOperation(storeAddress, StringKeyedJDBCStoreResourceDefinition.DeprecatedAttribute.TABLE);
                 }
             };
             builder.addRawOperationTransformationOverride(ModelDescriptionConstants.ADD, new SimpleOperationTransformer(addTransformer));
@@ -98,7 +99,7 @@ public class StringTableResourceDefinition extends TableResourceDefinition {
                 @Override
                 public ModelNode transformOperation(ModelNode operation) {
                     PathAddress storeAddress = Operations.getPathAddress(operation).getParent();
-                    return Operations.createUndefineAttributeOperation(storeAddress, StringKeyedJDBCStoreResourceDefinition.Attribute.TABLE);
+                    return Operations.createUndefineAttributeOperation(storeAddress, StringKeyedJDBCStoreResourceDefinition.DeprecatedAttribute.TABLE);
                 }
             };
             builder.addRawOperationTransformationOverride(ModelDescriptionConstants.REMOVE, new SimpleOperationTransformer(removeTransformer));
@@ -111,9 +112,10 @@ public class StringTableResourceDefinition extends TableResourceDefinition {
 
     @Override
     public void registerOperations(ManagementResourceRegistration registration) {
+        ResourceDescriptor descriptor = new ResourceDescriptor(this.getResourceDescriptionResolver()).addAttributes(Attribute.class).addAttributes(TableResourceDefinition.Attribute.class).addAttributes(TableResourceDefinition.ColumnAttribute.class);
         ResourceServiceHandler handler = new SimpleResourceServiceHandler<>(new StringTableBuilderFactory());
-        new AddStepHandler(this.getResourceDescriptionResolver(), handler).addAttributes(Attribute.class).addAttributes(TableResourceDefinition.Attribute.class).addAttributes(TableResourceDefinition.ColumnAttribute.class).register(registration);
-        new RemoveStepHandler(this.getResourceDescriptionResolver(), handler).register(registration);
+        new AddStepHandler(descriptor, handler).register(registration);
+        new RemoveStepHandler(descriptor, handler).register(registration);
     }
 
     @Override

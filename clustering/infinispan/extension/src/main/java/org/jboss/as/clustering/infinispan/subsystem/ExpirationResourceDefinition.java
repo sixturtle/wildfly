@@ -23,6 +23,7 @@
 package org.jboss.as.clustering.infinispan.subsystem;
 
 import org.jboss.as.clustering.controller.AddStepHandler;
+import org.jboss.as.clustering.controller.ResourceDescriptor;
 import org.jboss.as.clustering.controller.ReloadRequiredWriteAttributeHandler;
 import org.jboss.as.clustering.controller.RemoveStepHandler;
 import org.jboss.as.clustering.controller.ResourceServiceHandler;
@@ -50,19 +51,19 @@ public class ExpirationResourceDefinition extends ComponentResourceDefinition {
     static final PathElement LEGACY_PATH = PathElement.pathElement(PATH.getValue(), "EXPIRATION");
 
     enum Attribute implements org.jboss.as.clustering.controller.Attribute {
-        INTERVAL("interval", ModelType.LONG, new ModelNode(60000L)),
-        LIFESPAN("lifespan", ModelType.LONG, new ModelNode(-1L)),
-        MAX_IDLE("max-idle", ModelType.LONG, new ModelNode(-1L)),
+        INTERVAL("interval", new ModelNode(60000L)),
+        LIFESPAN("lifespan", new ModelNode(-1L)),
+        MAX_IDLE("max-idle", new ModelNode(-1L)),
         ;
         private final AttributeDefinition definition;
 
-        Attribute(String name, ModelType type, ModelNode defaultValue) {
-            this.definition = new SimpleAttributeDefinitionBuilder(name, type)
+        Attribute(String name, ModelNode defaultValue) {
+            this.definition = new SimpleAttributeDefinitionBuilder(name, ModelType.LONG)
                     .setAllowExpression(true)
                     .setAllowNull(true)
                     .setDefaultValue(defaultValue)
                     .setFlags(AttributeAccess.Flag.RESTART_RESOURCE_SERVICES)
-                    .setMeasurementUnit((type == ModelType.LONG) ? MeasurementUnit.MILLISECONDS : null)
+                    .setMeasurementUnit(MeasurementUnit.MILLISECONDS)
                     .build();
         }
 
@@ -84,9 +85,10 @@ public class ExpirationResourceDefinition extends ComponentResourceDefinition {
 
     @Override
     public void registerOperations(ManagementResourceRegistration registration) {
+        ResourceDescriptor descriptor = new ResourceDescriptor(this.getResourceDescriptionResolver()).addAttributes(Attribute.class);
         ResourceServiceHandler handler = new SimpleResourceServiceHandler<>(new ExpirationBuilderFactory());
-        new AddStepHandler(this.getResourceDescriptionResolver(), handler).addAttributes(Attribute.class).register(registration);
-        new RemoveStepHandler(this.getResourceDescriptionResolver(), handler).register(registration);
+        new AddStepHandler(descriptor, handler).register(registration);
+        new RemoveStepHandler(descriptor, handler).register(registration);
     }
 
     @Override

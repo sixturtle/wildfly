@@ -29,6 +29,7 @@ import org.jboss.as.controller.OperationDefinition;
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.as.controller.OperationStepHandler;
 import org.jboss.as.controller.PathAddress;
+import org.jboss.as.controller.PrimitiveListAttributeDefinition;
 import org.jboss.as.controller.SimpleAttributeDefinitionBuilder;
 import org.jboss.as.controller.SimpleOperationDefinition;
 import org.jboss.as.controller.SimpleResourceDefinition;
@@ -38,6 +39,7 @@ import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
 import org.wildfly.extension.undertow.Constants;
 import org.wildfly.extension.undertow.UndertowExtension;
+import org.wildfly.extension.undertow.logging.UndertowLogger;
 
 /**
  * Runtime representation of a mod_cluster node
@@ -120,12 +122,29 @@ public class ModClusterNodeDefinition extends SimpleResourceDefinition {
             .setStorageRuntime()
             .build();
 
+    public static final AttributeDefinition URI = new SimpleAttributeDefinitionBuilder(Constants.URI, ModelType.STRING)
+            .setAllowNull(true)
+            .setStorageRuntime()
+            .build();
+
+    public static final AttributeDefinition ALIASES = new PrimitiveListAttributeDefinition.Builder(Constants.ALIASES, ModelType.STRING)
+            .setAllowNull(true)
+            .setStorageRuntime()
+            .build();
+
+
+    public static final AttributeDefinition ELECTED = new SimpleAttributeDefinitionBuilder(Constants.ELECTED, ModelType.INT)
+            .setAllowNull(true)
+            .setStorageRuntime()
+            .build();
+
     public final OperationDefinition ENABLE = new SimpleOperationDefinition(Constants.ENABLE, getResourceDescriptionResolver());
     public final OperationDefinition DISABLE = new SimpleOperationDefinition(Constants.DISABLE, getResourceDescriptionResolver());
+    public final OperationDefinition STOP = new SimpleOperationDefinition(Constants.STOP, getResourceDescriptionResolver());
 
 
     ModClusterNodeDefinition() {
-        super(UndertowExtension.NODE, UndertowExtension.getResolver("handler","mod-cluster", "balancer", "node"), null, null, true);
+        super(UndertowExtension.NODE, UndertowExtension.getResolver("handler", "mod-cluster", "balancer", "node"), null, null, true);
     }
 
     @Override
@@ -139,7 +158,7 @@ public class ModClusterNodeDefinition extends SimpleResourceDefinition {
         resourceRegistration.registerOperationHandler(ENABLE, new AbstractNodeOperation() {
             @Override
             protected void handleNode(OperationContext context, ModClusterStatus.Node ctx, ModelNode operation) throws OperationFailedException {
-                for(ModClusterStatus.Context n : ctx.getContexts()) {
+                for (ModClusterStatus.Context n : ctx.getContexts()) {
                     n.enable();
                 }
             }
@@ -147,8 +166,16 @@ public class ModClusterNodeDefinition extends SimpleResourceDefinition {
         resourceRegistration.registerOperationHandler(DISABLE, new AbstractNodeOperation() {
             @Override
             protected void handleNode(OperationContext context, ModClusterStatus.Node ctx, ModelNode operation) throws OperationFailedException {
-                for(ModClusterStatus.Context n : ctx.getContexts()) {
+                for (ModClusterStatus.Context n : ctx.getContexts()) {
                     n.disable();
+                }
+            }
+        });
+        resourceRegistration.registerOperationHandler(STOP, new AbstractNodeOperation() {
+            @Override
+            protected void handleNode(OperationContext context, ModClusterStatus.Node ctx, ModelNode operation) throws OperationFailedException {
+                for (ModClusterStatus.Context n : ctx.getContexts()) {
+                    n.stop();
                 }
             }
         });
@@ -175,7 +202,12 @@ public class ModClusterNodeDefinition extends SimpleResourceDefinition {
 
             @Override
             protected void handleNode(OperationContext context, ModClusterStatus.Node ctx, ModelNode operation) throws OperationFailedException {
-                context.getResult().set(new ModelNode(ctx.getDomain()));
+                final String domain = ctx.getDomain();
+                if (domain == null) {
+                    context.getResult().set(new ModelNode());
+                } else {
+                    context.getResult().set(new ModelNode(domain));
+                }
             }
         });
         resourceRegistration.registerReadOnlyAttribute(CACHE_CONNECTIONS, new AbstractNodeOperation() {
@@ -255,6 +287,32 @@ public class ModClusterNodeDefinition extends SimpleResourceDefinition {
                 context.getResult().set(new ModelNode(ctx.isQueueNewRequests()));
             }
         });
+        resourceRegistration.registerReadOnlyAttribute(URI, new AbstractNodeOperation() {
+
+            @Override
+            protected void handleNode(OperationContext context, ModClusterStatus.Node ctx, ModelNode operation) throws OperationFailedException {
+                context.getResult().set(new ModelNode(ctx.getUri().toString()));
+            }
+        });
+        resourceRegistration.registerReadOnlyAttribute(ALIASES, new AbstractNodeOperation() {
+
+            @Override
+            protected void handleNode(OperationContext context, ModClusterStatus.Node ctx, ModelNode operation) throws OperationFailedException {
+                final ModelNode result = new ModelNode();
+                for (String alias : ctx.getAliases()) {
+                    UndertowLogger.ROOT_LOGGER.tracef("Adding alias %s", alias);
+                    result.add(alias);
+                }
+                context.getResult().set(result);
+            }
+        });
+        resourceRegistration.registerReadOnlyAttribute(ELECTED, new AbstractNodeOperation() {
+
+            @Override
+            protected void handleNode(OperationContext context, ModClusterStatus.Node ctx, ModelNode operation) throws OperationFailedException {
+                context.getResult().set(new ModelNode(ctx.getElected()));
+            }
+        });
     }
 
     private abstract class AbstractNodeOperation implements OperationStepHandler {
@@ -287,7 +345,7 @@ public class ModClusterNodeDefinition extends SimpleResourceDefinition {
             handleNode(context, node, operation);
         }
 
-        protected abstract void handleNode(OperationContext context, ModClusterStatus.Node ctx, ModelNode operation) throws OperationFailedException ;
+        protected abstract void handleNode(OperationContext context, ModClusterStatus.Node ctx, ModelNode operation) throws OperationFailedException;
     }
 
 }

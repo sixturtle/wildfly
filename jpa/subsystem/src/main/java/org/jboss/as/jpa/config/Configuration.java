@@ -52,7 +52,7 @@ public class Configuration {
     /**
      * Hibernate OGM persistence provider
      */
-    public static final String PROVIDER_MODULE_HIBERNATE_OGM = "org.hibernate:ogm";
+    public static final String PROVIDER_MODULE_HIBERNATE_OGM = "org.hibernate.ogm";
 
     public static final String PROVIDER_MODULE_ECLIPSELINK = "org.eclipse.persistence";
 
@@ -159,6 +159,16 @@ public class Configuration {
      * name of the persistence provider adapter class
      */
     public static final String ADAPTER_CLASS = "jboss.as.jpa.adapterClass";
+
+    /**
+     * name of the Hibernate Search module name configuration setting in persistence unit definition
+     */
+    public static final String HIBERNATE_SEARCH_MODULE = "wildfly.jpa.hibernate.search.module";
+
+    /**
+     * name of the Hibernate Search module name
+     */
+    public static final String PROVIDER_MODULE_HIBERNATE_SEARCH = "org.hibernate.search.orm:main";
 
     private static final String EE_DEFAULT_DATASOURCE = "java:comp/DefaultDataSource";
     // key = provider class name, value = module name

@@ -31,7 +31,7 @@
 
     <groupId>org.wildfly</groupId>
     <artifactId>wildfly-parent</artifactId>
-    <version>10.0.0.Beta1-SNAPSHOT</version>
+    <version>10.0.0.CR1-SNAPSHOT</version>
 
     <name>WildFly: Parent Aggregator</name>
     <description>WildFly: Parent Aggregator</description>
@@ -87,13 +87,13 @@
         <version.com.github.relaxng>2011.1</version.com.github.relaxng>
         <version.com.google.guava>18.0</version.com.google.guava>
         <version.com.h2database>1.3.173</version.com.h2database>
-        <version.com.sun.faces>2.2.11-jbossorg-1</version.com.sun.faces>
+        <version.com.sun.faces>2.2.12-jbossorg-2</version.com.sun.faces>
         <version.com.sun.istack>2.21</version.com.sun.istack>
         <version.com.sun.xml.fastinfoset>1.2.13</version.com.sun.xml.fastinfoset>
         <version.com.sun.xsom>20140925</version.com.sun.xsom>
         <version.commons-beanutils>1.9.2</version.commons-beanutils>
         <version.commons-cli>1.2</version.commons-cli>
-        <version.commons-codec>1.9</version.commons-codec>
+        <version.commons-codec>1.10</version.commons-codec>
         <version.commons-collections>3.2.1</version.commons-collections>
         <version.commons-digester>1.8</version.commons-digester>
         <version.commons-pool>1.6</version.commons-pool>
@@ -103,6 +103,7 @@
         <version.httpunit>1.7</version.httpunit>
         <version.io.netty>4.0.26.Final</version.io.netty>
         <version.io.undertow.jastow>2.0.0.Beta2</version.io.undertow.jastow>
+        <version.io.undertow.js>1.0.0.Alpha3</version.io.undertow.js>
         <version.javax.activation>1.1.1</version.javax.activation>
         <version.javax.enterprise>1.2</version.javax.enterprise>
         <version.javax.jws.jsr181-api>1.0-MR1</version.javax.jws.jsr181-api>
@@ -113,57 +114,59 @@
         <version.joda-time>2.7</version.joda-time>
         <version.jsoup>1.8.1</version.jsoup>
         <version.net.jcip>1.0</version.net.jcip>
-        <version.org.antlr-34>3.4</version.org.antlr-34>
+        <version.net.shibboleth.utilities.java-support>7.1.1</version.net.shibboleth.utilities.java-support>
         <version.org.apache.activemq.artemis>1.0.0</version.org.apache.activemq.artemis>
         <version.org.apache.avro>1.7.6</version.org.apache.avro>
-        <version.org.apache.cxf>3.0.5</version.org.apache.cxf>
+        <version.org.apache.cxf>3.1.2</version.org.apache.cxf>
         <version.org.apache.cxf.xjcplugins>3.0.3</version.org.apache.cxf.xjcplugins>
         <version.org.apache.ds>2.0.0-M20</version.org.apache.ds>
-        <version.org.apache.httpcomponents.httpclient>4.3.6</version.org.apache.httpcomponents.httpclient>
-        <version.org.apache.httpcomponents.httpasyncclient>4.0.1</version.org.apache.httpcomponents.httpasyncclient>
-        <version.org.apache.httpcomponents.httpcore>4.3.3</version.org.apache.httpcomponents.httpcore>
+        <version.org.apache.httpcomponents.httpclient>4.5</version.org.apache.httpcomponents.httpclient>
+        <version.org.apache.httpcomponents.httpasyncclient>4.1</version.org.apache.httpcomponents.httpasyncclient>
+        <version.org.apache.httpcomponents.httpcore>4.4.1</version.org.apache.httpcomponents.httpcore>
         <version.org.apache.james.apache-mime4j>0.6</version.org.apache.james.apache-mime4j>
-        <version.org.apache.lucene>4.10.4</version.org.apache.lucene>
+        <version.org.apache.lucene>5.2.1</version.org.apache.lucene>
         <version.org.apache.myfaces.core>2.1.17</version.org.apache.myfaces.core>
+        <version.org.apache.openjpa>2.4.0</version.org.apache.openjpa>
+        <version.org.eclipselink.version>2.6.0</version.org.eclipselink.version>
         <version.org.apache.neethi>3.0.3</version.org.apache.neethi>
         <version.org.apache.qpid.proton>0.8</version.org.apache.qpid.proton>
-        <version.org.apache.santuario>2.0.4</version.org.apache.santuario>
+        <version.org.apache.santuario>2.0.5</version.org.apache.santuario>
         <version.org.apache.velocity>1.7</version.org.apache.velocity>
-        <version.org.apache.ws.security>2.0.4</version.org.apache.ws.security>
-        <version.org.apache.ws.xmlschema>2.0.2</version.org.apache.ws.xmlschema>
+        <version.org.apache.ws.security>2.1.2</version.org.apache.ws.security>
+        <version.org.apache.ws.xmlschema>2.2.1</version.org.apache.ws.xmlschema>
         <version.org.apache.xalan>2.7.1.jbossorg-1</version.org.apache.xalan>
         <version.org.bouncycastle>1.52</version.org.bouncycastle>
         <version.org.codehaus.jackson>1.9.13</version.org.codehaus.jackson>
         <version.org.codehaus.jettison>1.3.3</version.org.codehaus.jettison>
-        <version.org.codehaus.plexus.plexus-utils>3.0.21</version.org.codehaus.plexus.plexus-utils>
+        <version.org.cryptacular>1.0</version.org.cryptacular>
         <version.org.eclipse.jdt.core.compiler>4.4.2</version.org.eclipse.jdt.core.compiler>
         <version.org.glassfish.javax.el>3.0.1-b08-jbossorg-1</version.org.glassfish.javax.el>
         <version.org.glassfish.javax.enterprise.concurrent>1.0</version.org.glassfish.javax.enterprise.concurrent>
         <version.org.glassfish.javax.json>1.0.3</version.org.glassfish.javax.json>
-        <version.org.hibernate>5.0.0.CR2</version.org.hibernate>
+        <version.org.hibernate>5.0.0.Final</version.org.hibernate>
         <version.org.hibernate.commons.annotations>5.0.0.Final</version.org.hibernate.commons.annotations>
-        <version.org.hibernate.validator>5.2.0.Final</version.org.hibernate.validator>
+        <version.org.hibernate.validator>5.2.1.Final</version.org.hibernate.validator>
         <version.org.hibernate.javax.persistence.hibernate-jpa-2.1-api>1.0.0.Final</version.org.hibernate.javax.persistence.hibernate-jpa-2.1-api>
-        <version.org.hibernate.hql>1.1.0.Final</version.org.hibernate.hql>
-        <version.org.hibernate.search>5.4.0.Alpha1</version.org.hibernate.search>
+        <version.org.hibernate.search>5.5.0.Alpha1</version.org.hibernate.search>
         <version.org.hornetq>2.4.7.Final</version.org.hornetq>
-        <version.org.infinispan>7.2.3.Final</version.org.infinispan>
-        <version.redis.clients.jedis>2.2.1</version.redis.clients.jedis>
+        <version.org.infinispan>8.0.0.CR1</version.org.infinispan>
+        <version.redis.clients.jedis>2.7.3</version.redis.clients.jedis>
         <version.org.jasypt>1.9.1</version.org.jasypt>
         <version.org.javassist>3.18.1-GA</version.org.javassist>
-        <version.org.jberet>1.1.0.Final</version.org.jberet>
+        <version.org.jberet>1.2.0.Alpha2</version.org.jberet>
         <version.org.jdom>1.1.3</version.org.jdom>
         <version.org.jboss.activemq.artemis.integration>1.0.1</version.org.jboss.activemq.artemis.integration>
         <version.org.jboss.common.jboss-common-beans>2.0.0.Final</version.org.jboss.common.jboss-common-beans>
-        <version.org.jboss.hal.release-stream>2.8.3</version.org.jboss.hal.release-stream>
+        <version.org.jboss.hal.release-stream>2.8.5</version.org.jboss.hal.release-stream>
         <version.org.jboss.ejb-client>2.1.2.Final</version.org.jboss.ejb-client>
-        <version.org.jboss.ejb3.ext-api>2.1.0</version.org.jboss.ejb3.ext-api>
+        <version.org.jboss.ejb3.ext-api>2.2.0.Beta1</version.org.jboss.ejb3.ext-api>
         <version.org.jboss.genericjms>1.0.7.Final</version.org.jboss.genericjms>
         <version.org.jboss.iiop-client>1.0.0.Final</version.org.jboss.iiop-client>
         <version.org.jboss.ironjacamar>1.2.5.Final</version.org.jboss.ironjacamar>
+        <version.org.jboss.jandex>2.0.0.Beta3</version.org.jboss.jandex>
         <version.org.jboss.jboss-transaction-spi>7.3.0.Final</version.org.jboss.jboss-transaction-spi>
-        <version.org.jboss.metadata>10.0.0.Beta2</version.org.jboss.metadata>
-        <version.org.jboss.narayana>5.2.0.Final</version.org.jboss.narayana>
+        <version.org.jboss.metadata>10.0.0.Beta3</version.org.jboss.metadata>
+        <version.org.jboss.narayana>5.2.2.Final</version.org.jboss.narayana>
         <version.org.jboss.mod_cluster>1.3.1.Final</version.org.jboss.mod_cluster>
         <version.org.jboss.openjdk-orb>8.0.4.Final</version.org.jboss.openjdk-orb>
         <version.org.jboss.xnio.netty.netty-xnio-transport>0.1.1.Final</version.org.jboss.xnio.netty.netty-xnio-transport>
@@ -173,17 +176,15 @@
         <version.org.jboss.security.jboss-negotiation>2.3.7.Final</version.org.jboss.security.jboss-negotiation>
         <version.org.jboss.security.jbossxacml>2.0.8.Final</version.org.jboss.security.jbossxacml>
         <version.org.jboss.shrinkwrap.shrinkwrap>1.1.2</version.org.jboss.shrinkwrap.shrinkwrap>
-        <version.org.jboss.shrinkwrap.descriptors>2.0.0-alpha-6</version.org.jboss.shrinkwrap.descriptors>
-        <version.org.jboss.shrinkwrap.resolver>2.0.0</version.org.jboss.shrinkwrap.resolver>
-        <version.org.jboss.slf4j.slf4j-jboss-logmanager>1.0.3.GA</version.org.jboss.slf4j.slf4j-jboss-logmanager>
-        <version.org.jboss.logging.jul-to-slf4j-stub>1.0.1.Final</version.org.jboss.logging.jul-to-slf4j-stub>
+        <!-- only needed here until wildfly-arquillian has this version properly synced with arquillian itslef  -->
+        <version.org.jboss.shrinkwrap.descriptors>2.0.0-alpha-7</version.org.jboss.shrinkwrap.descriptors>
         <!-- Include the artifactId for org.jboss.spec project versions because artifactId contains the API spec version -->
         <version.org.jboss.spec.javax.annotation.jboss-annotations-api_1.2_spec>1.0.0.Final</version.org.jboss.spec.javax.annotation.jboss-annotations-api_1.2_spec>
         <version.org.jboss.spec.javax.batch.jboss-batch-api_1.0_spec>1.0.0.Final</version.org.jboss.spec.javax.batch.jboss-batch-api_1.0_spec>
         <version.org.jboss.spec.javax.ejb.jboss-ejb-api_3.2_spec>1.0.0.Final</version.org.jboss.spec.javax.ejb.jboss-ejb-api_3.2_spec>
         <version.org.jboss.spec.javax.el.jboss-el-api_3.0_spec>1.0.4.Final</version.org.jboss.spec.javax.el.jboss-el-api_3.0_spec>
         <version.org.jboss.spec.javax.enterprise.concurrent.jboss-concurrency-api_1.0_spec>1.0.0.Final</version.org.jboss.spec.javax.enterprise.concurrent.jboss-concurrency-api_1.0_spec>
-        <version.org.jboss.spec.javax.faces.jboss-jsf-api_2.2_spec>2.2.11</version.org.jboss.spec.javax.faces.jboss-jsf-api_2.2_spec>
+        <version.org.jboss.spec.javax.faces.jboss-jsf-api_2.2_spec>2.2.12</version.org.jboss.spec.javax.faces.jboss-jsf-api_2.2_spec>
         <version.org.jboss.spec.javax.jms.jboss-jms-api_2.0_spec>1.0.0.Final</version.org.jboss.spec.javax.jms.jboss-jms-api_2.0_spec>
         <version.org.jboss.spec.javax.management.j2ee.jboss-j2eemgmt-api_1.1_spec>1.0.1.Final</version.org.jboss.spec.javax.management.j2ee.jboss-j2eemgmt-api_1.1_spec>
         <version.org.jboss.spec.javax.resource.jboss-connector-api_1.7_spec>1.0.0.Final</version.org.jboss.spec.javax.resource.jboss-connector-api_1.7_spec>
@@ -200,29 +201,26 @@
         <version.org.jboss.spec.javax.xml.soap.jboss-saaj-api_1.3_spec>1.0.3.Final</version.org.jboss.spec.javax.xml.soap.jboss-saaj-api_1.3_spec>
         <version.org.jboss.spec.javax.xml.ws.jboss-jaxws-api_2.2_spec>2.0.2.Final</version.org.jboss.spec.javax.xml.ws.jboss-jaxws-api_2.2_spec>
         <version.org.jboss.spec.javax.websockets>1.1.1.Final</version.org.jboss.spec.javax.websockets>
-        <version.org.jboss.weld.weld>2.3.0.Beta3</version.org.jboss.weld.weld>
-        <version.org.jboss.weld.weld-api>2.3.Beta2</version.org.jboss.weld.weld-api>
+        <version.org.jboss.weld.weld>2.3.0.CR1</version.org.jboss.weld.weld>
+        <version.org.jboss.weld.weld-api>2.3.CR1</version.org.jboss.weld.weld-api>
         <version.org.jboss.ws.api>1.0.3.Final</version.org.jboss.ws.api>
-        <version.org.jboss.ws.spi>3.0.0.Final</version.org.jboss.ws.spi>
-        <version.org.jboss.ws.common>3.0.0.Final</version.org.jboss.ws.common>
+        <version.org.jboss.ws.spi>3.1.0.Beta1</version.org.jboss.ws.spi>
+        <version.org.jboss.ws.common>3.1.0.Beta1</version.org.jboss.ws.common>
         <version.org.jboss.ws.common.tools>1.2.1.Final</version.org.jboss.ws.common.tools>
-        <version.org.jboss.ws.cxf>5.0.0.Final</version.org.jboss.ws.cxf>
+        <version.org.jboss.ws.cxf>5.1.0.Beta1</version.org.jboss.ws.cxf>
         <version.org.jboss.ws.jaxws-undertow-httpspi>1.0.1.Final</version.org.jboss.ws.jaxws-undertow-httpspi>
         <version.org.jgroups>3.6.4.Final</version.org.jgroups>
         <version.org.jipijapa>1.0.1.Final</version.org.jipijapa>
-        <version.org.opensaml.opensaml>2.6.1</version.org.opensaml.opensaml>
-        <version.org.opensaml.openws>1.5.1</version.org.opensaml.openws>
-        <version.org.opensaml.xmltooling>1.4.1</version.org.opensaml.xmltooling>
+        <version.org.opensaml.opensaml>3.1.1</version.org.opensaml.opensaml>
         <version.org.picketbox.picketbox-commons>1.0.0.final</version.org.picketbox.picketbox-commons>
-        <version.org.picketlink>2.7.0.Final</version.org.picketlink>
+        <version.org.picketlink>2.5.5.CR1</version.org.picketlink>
         <version.org.scannotation>1.0.3</version.org.scannotation>
         <version.org.slf4j>1.7.7.jbossorg-1</version.org.slf4j>
         <version.org.syslog4j>0.9.30</version.org.syslog4j>
-        <version.org.testng>6.1.1</version.org.testng>
-        <version.org.wildfly.build-tools>1.1.0.Beta1</version.org.wildfly.build-tools>
+        <version.org.wildfly.build-tools>1.1.0.Beta2</version.org.wildfly.build-tools>
         <version.org.wildfly.checkstyle-config>1.0.4.Final</version.org.wildfly.checkstyle-config>
-        <version.org.wildfly.core>2.0.0.Alpha11</version.org.wildfly.core>
-        <version.org.wildfly.arquillian>1.0.0.Final</version.org.wildfly.arquillian>
+        <version.org.wildfly.core>2.0.0.Beta4</version.org.wildfly.core>
+        <version.org.wildfly.arquillian>1.0.1.Final</version.org.wildfly.arquillian>
         <version.org.yaml.snakeyaml>1.15</version.org.yaml.snakeyaml>
         <version.sun.jaxb>2.2.11</version.sun.jaxb>
         <version.sun.saaj-impl>1.3.16-jbossorg-1</version.sun.saaj-impl>
@@ -259,6 +257,7 @@
         <org.jboss.model.test.cache.root>[pom.xml,testsuite]</org.jboss.model.test.cache.root>
         <!-- Location relative to root that will be used for the cached legacy classpaths used by subsystem-test and core-model-test-->
         <org.jboss.model.test.classpath.cache>target/model-test-classpath-cache</org.jboss.model.test.classpath.cache>
+        <version.com.github.spullara.mustache>0.8.13</version.com.github.spullara.mustache>
     </properties>
 
     <modules>
@@ -274,7 +273,6 @@
         <module>dist</module>
         <module>ee</module>
         <module>ejb3</module>
-        <module>embedded</module>
         <module>feature-pack</module>
         <module>iiop-openjdk</module>
         <module>jaxrs</module>
@@ -805,11 +803,25 @@
                     <groupId>org.wildfly.build</groupId>
                     <artifactId>wildfly-feature-pack-build-maven-plugin</artifactId>
                     <version>${version.org.wildfly.build-tools}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.jboss</groupId>
+                            <artifactId>jandex</artifactId>
+                            <version>${version.org.jboss.jandex}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.wildfly.build</groupId>
                     <artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
                     <version>${version.org.wildfly.build-tools}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.jboss</groupId>
+                            <artifactId>jandex</artifactId>
+                            <version>${version.org.jboss.jandex}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -845,6 +857,12 @@
             <dependency>
                 <groupId>org.wildfly</groupId>
                 <artifactId>wildfly-batch</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wildfly</groupId>
+                <artifactId>wildfly-batch-jberet</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -968,7 +986,12 @@
 
             <dependency>
                 <groupId>org.wildfly</groupId>
-                <artifactId>wildfly-clustering-singleton</artifactId>
+                <artifactId>wildfly-clustering-singleton-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly</groupId>
+                <artifactId>wildfly-clustering-singleton-extension</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -1053,12 +1076,6 @@
                 <artifactId>wildfly-ejb-client-bom</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wildfly</groupId>
-                <artifactId>wildfly-embedded</artifactId>
-                <version>${project.version}</version>
             </dependency>
 
             <dependency>
@@ -1347,6 +1364,13 @@
                 <groupId>com.github.relaxng</groupId>
                 <artifactId>relaxngDatatype</artifactId>
                 <version>${version.com.github.relaxng}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.github.spullara.mustache.java</groupId>
+                <artifactId>compiler</artifactId>
+                <version>${version.com.github.spullara.mustache}</version>
             </dependency>
 
             <dependency>
@@ -1784,6 +1808,18 @@
 
             <dependency>
                 <groupId>org.apache.activemq</groupId>
+                <artifactId>artemis-cli</artifactId>
+                <version>${version.org.apache.activemq.artemis}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>*</groupId>
+                        <artifactId>*</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
                 <artifactId>artemis-commons</artifactId>
                 <version>${version.org.apache.activemq.artemis}</version>
                 <exclusions>
@@ -1796,6 +1832,12 @@
                         <artifactId>commons-logging</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>artemis-dto</artifactId>
+                <version>${version.org.apache.activemq.artemis}</version>
             </dependency>
 
             <dependency>
@@ -2299,6 +2341,18 @@
                         <groupId>org.apache.cxf</groupId>
                         <artifactId>cxf-core</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>xalan</groupId>
+                        <artifactId>xalan</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-security-saml</artifactId>
+                <version>${version.org.apache.cxf}</version>
+                <exclusions>
                     <exclusion>
                         <groupId>xalan</groupId>
                         <artifactId>xalan</artifactId>
@@ -3217,127 +3271,93 @@
             </dependency>
 
             <dependency>
+                <groupId>org.cryptacular</groupId>
+                <artifactId>cryptacular</artifactId>
+                <version>${version.org.cryptacular}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.opensaml</groupId>
-                <artifactId>opensaml</artifactId>
+                <artifactId>opensaml-core</artifactId>
                 <version>${version.org.opensaml.opensaml}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.opensaml</groupId>
-                        <artifactId>openws</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>velocity</groupId>
-                        <artifactId>velocity</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.owasp.esapi</groupId>
-                        <artifactId>esapi</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>log4j-over-slf4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>jcl-over-slf4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>jul-to-slf4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.bouncycastle</groupId>
-                        <artifactId>bcprov-ext-jdk15</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.bouncycastle</groupId>
-                        <artifactId>bcprov-jdk15</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>ca.juliusdavies</groupId>
-                        <artifactId>not-yet-commons-ssl</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>net.jcip</groupId>
-                        <artifactId>jcip-annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xml-resolver</groupId>
-                        <artifactId>xml-resolver</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xerces</groupId>
-                        <artifactId>xercesImpl</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xml-apis</groupId>
-                        <artifactId>xml-apis</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xalan</groupId>
-                        <artifactId>xalan</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>commons-codec</groupId>
-                        <artifactId>commons-codec</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>commons-httpclient</groupId>
-                        <artifactId>commons-httpclient</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>commons-lang</groupId>
-                        <artifactId>commons-lang</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>commons-collections</groupId>
-                        <artifactId>commons-collections</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>org.opensaml</groupId>
-                <artifactId>openws</artifactId>
-                <version>${version.org.opensaml.openws}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-httpclient</groupId>
-                        <artifactId>commons-httpclient</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xml-apis</groupId>
-                        <artifactId>xml-apis</artifactId>
-                    </exclusion>
-                </exclusions>
+                <artifactId>opensaml-profile-api</artifactId>
+                <version>${version.org.opensaml.opensaml}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.opensaml</groupId>
-                <artifactId>xmltooling</artifactId>
-                <version>${version.org.opensaml.xmltooling}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>log4j-over-slf4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>jul-to-slf4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.bouncycastle</groupId>
-                        <artifactId>bcprov-jdk15</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>ca.juliusdavies</groupId>
-                        <artifactId>not-yet-commons-ssl</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xml-apis</groupId>
-                        <artifactId>xml-apis</artifactId>
-                    </exclusion>
-                </exclusions>
+                <artifactId>opensaml-saml-api</artifactId>
+                <version>${version.org.opensaml.opensaml}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml-saml-impl</artifactId>
+                <version>${version.org.opensaml.opensaml}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml-security-api</artifactId>
+                <version>${version.org.opensaml.opensaml}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml-security-impl</artifactId>
+                <version>${version.org.opensaml.opensaml}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml-soap-api</artifactId>
+                <version>${version.org.opensaml.opensaml}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml-xacml-api</artifactId>
+                <version>${version.org.opensaml.opensaml}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml-xacml-impl</artifactId>
+                <version>${version.org.opensaml.opensaml}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml-xacml-saml-api</artifactId>
+                <version>${version.org.opensaml.opensaml}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml-xacml-saml-impl</artifactId>
+                <version>${version.org.opensaml.opensaml}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml-xmlsec-api</artifactId>
+                <version>${version.org.opensaml.opensaml}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.opensaml</groupId>
+                <artifactId>opensaml-xmlsec-impl</artifactId>
+                <version>${version.org.opensaml.opensaml}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.shibboleth.utilities</groupId>
+                <artifactId>java-support</artifactId>
+                <version>${version.net.shibboleth.utilities.java-support}</version>
             </dependency>
 
             <dependency>
@@ -3712,13 +3732,6 @@
                 </exclusions>
             </dependency>
 
-            <!-- This dependency needs to be managed due to the dependency convergence enforcer rule -->
-            <dependency>
-                <groupId>org.codehaus.plexus</groupId>
-                <artifactId>plexus-utils</artifactId>
-                <version>${version.org.codehaus.plexus.plexus-utils}</version>
-            </dependency>
-
             <!-- JSR-353 JSONP RI implementation -->
             <dependency>
                 <groupId>org.glassfish</groupId>
@@ -3929,45 +3942,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.hibernate.hql</groupId>
-                <artifactId>hibernate-hql-lucene</artifactId>
-                <version>${version.org.hibernate.hql}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-search-engine</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.hibernate.javax.persistence</groupId>
-                        <artifactId>hibernate-jpa-2.0-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate.hql</groupId>
-                <artifactId>hibernate-hql-parser</artifactId>
-                <version>${version.org.hibernate.hql}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr-runtime</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.antlr</groupId>
-                <artifactId>antlr-runtime</artifactId>
-                <version>${version.org.antlr-34}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>stringtemplate</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.1-api</artifactId>
                 <version>${version.org.hibernate.javax.persistence.hibernate-jpa-2.1-api}</version>
@@ -4039,24 +4013,6 @@
 
             <dependency>
                 <groupId>org.hornetq</groupId>
-                <artifactId>hornetq-amqp-protocol</artifactId>
-                <version>${version.org.hornetq}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.hornetq</groupId>
-                <artifactId>hornetq-tools</artifactId>
-                <version>${version.org.hornetq}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.hornetq</groupId>
-                <artifactId>hornetq-server</artifactId>
-                <version>${version.org.hornetq}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.hornetq</groupId>
                 <artifactId>hornetq-commons</artifactId>
                 <version>${version.org.hornetq}</version>
             </dependency>
@@ -4081,32 +4037,6 @@
 
             <dependency>
                 <groupId>org.hornetq</groupId>
-                <artifactId>hornetq-jms-server</artifactId>
-                <version>${version.org.hornetq}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>io.netty</groupId>
-                        <artifactId>netty</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.jboss.jbossts</groupId>
-                        <artifactId>jbossjts</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.jboss.naming</groupId>
-                        <artifactId>jnpserver</artifactId>
-                    </exclusion>
-                    <!-- TODO remove this exclusion once this supports JTA 1.2 -->
-                    <!-- superseded by org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec -->
-                    <exclusion>
-                        <groupId>org.jboss.spec.javax.transaction</groupId>
-                        <artifactId>jboss-transaction-api_1.1_spec</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.hornetq</groupId>
                 <artifactId>hornetq-jms-client</artifactId>
                 <version>${version.org.hornetq}</version>
             </dependency>
@@ -4114,18 +4044,6 @@
             <dependency>
                 <groupId>org.hornetq</groupId>
                 <artifactId>hornetq-native</artifactId>
-                <version>${version.org.hornetq}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.hornetq</groupId>
-                <artifactId>hornetq-ra</artifactId>
-                <version>${version.org.hornetq}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.hornetq</groupId>
-                <artifactId>hornetq-stomp-protocol</artifactId>
                 <version>${version.org.hornetq}</version>
             </dependency>
 
@@ -4220,44 +4138,11 @@
                 <artifactId>infinispan-lucene-directory</artifactId>
                 <version>${version.org.infinispan}</version>
             </dependency>
+
             <dependency>
-                <groupId>org.infinispan</groupId>
-                <artifactId>infinispan-objectfilter</artifactId>
-                <version>${version.org.infinispan}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.hibernate.hql</groupId>
-                        <artifactId>hibernate-hql-parser</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.infinispan</groupId>
-                <artifactId>infinispan-query</artifactId>
-                <version>${version.org.infinispan}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.hibernate.hql</groupId>
-                        <artifactId>hibernate-hql-lucene</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.hibernate.hql</groupId>
-                        <artifactId>hibernate-hql-parser</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-search-engine</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-search-serialization-avro</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.infinispan</groupId>
-                <artifactId>infinispan-query-dsl</artifactId>
-                <version>${version.org.infinispan}</version>
+                <groupId>org.jboss</groupId>
+                <artifactId>jandex</artifactId>
+                <version>${version.org.jboss.jandex}</version>
             </dependency>
 
             <dependency>
@@ -4526,7 +4411,7 @@
             <dependency>
                 <groupId>org.wildfly</groupId>
                 <artifactId>jipijapa-hibernate4-3</artifactId>
-		<version>${project.version}</version>
+                <version>${project.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.hibernate</groupId>
@@ -4658,6 +4543,12 @@
                 <groupId>io.undertow.jastow</groupId>
                 <artifactId>jastow</artifactId>
                 <version>${version.io.undertow.jastow}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.undertow.js</groupId>
+                <artifactId>undertow-js</artifactId>
+                <version>${version.io.undertow.js}</version>
             </dependency>
 
             <dependency>
@@ -5128,52 +5019,20 @@
                 <version>${version.org.jboss.security.jbossxacml}</version>
             </dependency>
 
+            <!-- only still used by tests -->
             <dependency>
                 <groupId>org.jboss.shrinkwrap</groupId>
                 <artifactId>shrinkwrap-api</artifactId>
                 <version>${version.org.jboss.shrinkwrap.shrinkwrap}</version>
+                <scope>test</scope>
             </dependency>
 
-            <dependency>
-                <groupId>org.jboss.shrinkwrap</groupId>
-                <artifactId>shrinkwrap-spi</artifactId>
-                <version>${version.org.jboss.shrinkwrap.shrinkwrap}</version>
-            </dependency>
-
+            <!-- only still used by JPA tests -->
             <dependency>
                 <groupId>org.jboss.shrinkwrap</groupId>
                 <artifactId>shrinkwrap-impl-base</artifactId>
                 <version>${version.org.jboss.shrinkwrap.shrinkwrap}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jboss.shrinkwrap.descriptors</groupId>
-                <artifactId>shrinkwrap-descriptors-api-base</artifactId>
-                <version>${version.org.jboss.shrinkwrap.descriptors}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jboss.shrinkwrap.descriptors</groupId>
-                <artifactId>shrinkwrap-descriptors-impl-base</artifactId>
-                <version>${version.org.jboss.shrinkwrap.descriptors}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jboss.shrinkwrap.descriptors</groupId>
-                <artifactId>shrinkwrap-descriptors-api</artifactId>
-                <version>${version.org.jboss.shrinkwrap.descriptors}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jboss.shrinkwrap.descriptors</groupId>
-                <artifactId>shrinkwrap-descriptors-spi</artifactId>
-                <version>${version.org.jboss.shrinkwrap.descriptors}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jboss.slf4j</groupId>
-                <artifactId>slf4j-jboss-logmanager</artifactId>
-                <version>${version.org.jboss.slf4j.slf4j-jboss-logmanager}</version>
+                <scope>test</scope>
             </dependency>
 
             <dependency>
@@ -6069,12 +5928,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>${version.org.testng}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.wildfly.arquillian</groupId>
                 <artifactId>wildfly-arquillian-parent</artifactId>
                 <version>${version.org.wildfly.arquillian}</version>
@@ -6087,39 +5940,16 @@
                 <version>${version.org.wildfly.arquillian}</version>
             </dependency>
 
+            <!-- only needed until wildfly-arquillian has properly synced this version with arquillian it uses -->
             <dependency>
-                <groupId>org.wildfly.arquillian</groupId>
-                <artifactId>wildfly-arquillian-container-embedded</artifactId>
-                <version>${version.org.wildfly.arquillian}</version>
+                <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+                <artifactId>shrinkwrap-descriptors-impl-base</artifactId>
+                <version>${version.org.jboss.shrinkwrap.descriptors}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.wildfly.arquillian</groupId>
                 <artifactId>wildfly-arquillian-container-managed</artifactId>
-                <version>${version.org.wildfly.arquillian}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wildfly.arquillian</groupId>
-                <artifactId>wildfly-arquillian-container-remote</artifactId>
-                <version>${version.org.wildfly.arquillian}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wildfly.arquillian</groupId>
-                <artifactId>wildfly-arquillian-common-domain</artifactId>
-                <version>${version.org.wildfly.arquillian}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wildfly.arquillian</groupId>
-                <artifactId>wildfly-arquillian-container-domain-managed</artifactId>
-                <version>${version.org.wildfly.arquillian}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wildfly.arquillian</groupId>
-                <artifactId>wildfly-arquillian-container-domain-remote</artifactId>
                 <version>${version.org.wildfly.arquillian}</version>
             </dependency>
 
@@ -6133,12 +5963,6 @@
                         <artifactId>wildfly-security-manager</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wildfly.arquillian</groupId>
-                <artifactId>wildfly-arquillian-testenricher-msc</artifactId>
-                <version>${version.org.wildfly.arquillian}</version>
             </dependency>
 
             <dependency>

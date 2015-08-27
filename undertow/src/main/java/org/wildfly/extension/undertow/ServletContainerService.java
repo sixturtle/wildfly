@@ -62,6 +62,7 @@ public class ServletContainerService implements Service<ServletContainerService>
     private final int defaultSessionTimeout;
     private final boolean disableCachingForSecuredPages;
     private final Boolean directoryListingEnabled;
+    private final int sessionIdLength;
 
     private final boolean websocketsEnabled;
     private final InjectedValue<Pool<ByteBuffer>> websocketsBufferPool = new InjectedValue<>();
@@ -69,10 +70,11 @@ public class ServletContainerService implements Service<ServletContainerService>
     private final boolean dispatchWebsocketInvocationToWorker;
     private final Map<String, String> mimeMappings;
     private final List<String> welcomeFiles;
+    private final boolean proactiveAuth;
 
     public ServletContainerService(boolean allowNonStandardWrappers, ServletStackTraces stackTraces, SessionCookieConfig sessionCookieConfig, JSPConfig jspConfig,
                                    String defaultEncoding, boolean useListenerEncoding, boolean ignoreFlush, boolean eagerFilterInit, int defaultSessionTimeout,
-                                   boolean disableCachingForSecuredPages, boolean websocketsEnabled, boolean dispatchWebsocketInvocationToWorker, Map<String, String> mimeMappings, List<String> welcomeFiles, Boolean directoryListingEnabled) {
+                                   boolean disableCachingForSecuredPages, boolean websocketsEnabled, boolean dispatchWebsocketInvocationToWorker, Map<String, String> mimeMappings, List<String> welcomeFiles, Boolean directoryListingEnabled, boolean proactiveAuth, int sessionIdLength) {
         this.allowNonStandardWrappers = allowNonStandardWrappers;
         this.stackTraces = stackTraces;
         this.sessionCookieConfig = sessionCookieConfig;
@@ -86,8 +88,10 @@ public class ServletContainerService implements Service<ServletContainerService>
         this.websocketsEnabled = websocketsEnabled;
         this.dispatchWebsocketInvocationToWorker = dispatchWebsocketInvocationToWorker;
         this.directoryListingEnabled = directoryListingEnabled;
+        this.proactiveAuth = proactiveAuth;
         this.welcomeFiles = new ArrayList<>(welcomeFiles);
         this.mimeMappings = new HashMap<>(mimeMappings);
+        this.sessionIdLength = sessionIdLength;
     }
 
     public void start(StartContext context) throws StartException {
@@ -188,5 +192,14 @@ public class ServletContainerService implements Service<ServletContainerService>
 
     public Boolean getDirectoryListingEnabled() {
         return directoryListingEnabled;
+    }
+
+
+    public boolean isProactiveAuth() {
+        return proactiveAuth;
+    }
+
+    public int getSessionIdLength() {
+        return sessionIdLength;
     }
 }

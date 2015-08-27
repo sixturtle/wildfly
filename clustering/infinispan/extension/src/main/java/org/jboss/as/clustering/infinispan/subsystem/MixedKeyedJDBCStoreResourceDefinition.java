@@ -24,6 +24,7 @@ package org.jboss.as.clustering.infinispan.subsystem;
 
 import org.infinispan.persistence.jdbc.configuration.TableManipulationConfiguration;
 import org.jboss.as.clustering.controller.AddStepHandler;
+import org.jboss.as.clustering.controller.ResourceDescriptor;
 import org.jboss.as.clustering.controller.RemoveStepHandler;
 import org.jboss.as.clustering.controller.ResourceServiceHandler;
 import org.jboss.as.clustering.controller.ResourceServiceBuilderFactory;
@@ -55,13 +56,14 @@ public class MixedKeyedJDBCStoreResourceDefinition extends JDBCStoreResourceDefi
     static final PathElement LEGACY_PATH = PathElement.pathElement("mixed-keyed-jdbc-store", "MIXED_KEYED_JDBC_STORE");
     static final PathElement PATH = pathElement("mixed-jdbc");
 
-    enum Attribute implements org.jboss.as.clustering.controller.Attribute {
-        @Deprecated BINARY_TABLE(BinaryKeyedJDBCStoreResourceDefinition.Attribute.TABLE),
-        @Deprecated STRING_TABLE(StringKeyedJDBCStoreResourceDefinition.Attribute.TABLE),
+    @Deprecated
+    enum DeprecatedAttribute implements org.jboss.as.clustering.controller.Attribute {
+        BINARY_TABLE(BinaryKeyedJDBCStoreResourceDefinition.DeprecatedAttribute.TABLE),
+        STRING_TABLE(StringKeyedJDBCStoreResourceDefinition.DeprecatedAttribute.TABLE),
         ;
         private final AttributeDefinition definition;
 
-        Attribute(org.jboss.as.clustering.controller.Attribute attribute) {
+        DeprecatedAttribute(org.jboss.as.clustering.controller.Attribute attribute) {
             this.definition = attribute.getDefinition();
         }
 
@@ -86,18 +88,19 @@ public class MixedKeyedJDBCStoreResourceDefinition extends JDBCStoreResourceDefi
 
     @Override
     public void registerOperations(final ManagementResourceRegistration registration) {
+        ResourceDescriptor descriptor = new ResourceDescriptor(this.getResourceDescriptionResolver()).addAttributes(JDBCStoreResourceDefinition.Attribute.class).addAttributes(StoreResourceDefinition.Attribute.class);
         ResourceServiceHandler handler = new SimpleResourceServiceHandler<>(new MixedKeyedJDBCStoreBuilderFactory());
-        new AddStepHandler(this.getResourceDescriptionResolver(), handler) {
+        new AddStepHandler(descriptor, handler) {
             @Override
             public void execute(OperationContext context, ModelNode operation) throws OperationFailedException {
                 super.execute(context, operation);
                 // Translate deprecated BINARY_TABLE attribute into separate add table operation
-                this.addTableStep(context, operation, Attribute.BINARY_TABLE, BinaryTableResourceDefinition.PATH, new BinaryTableBuilderFactory());
+                this.addTableStep(context, operation, DeprecatedAttribute.BINARY_TABLE, BinaryTableResourceDefinition.PATH, new BinaryTableBuilderFactory());
                 // Translate deprecated STRING_TABLE attribute into separate add table operation
-                this.addTableStep(context, operation, Attribute.STRING_TABLE, StringTableResourceDefinition.PATH, new StringTableBuilderFactory());
+                this.addTableStep(context, operation, DeprecatedAttribute.STRING_TABLE, StringTableResourceDefinition.PATH, new StringTableBuilderFactory());
             }
 
-            private void addTableStep(OperationContext context, ModelNode operation, Attribute attribute, PathElement path, ResourceServiceBuilderFactory<TableManipulationConfiguration> provider) {
+            private void addTableStep(OperationContext context, ModelNode operation, DeprecatedAttribute attribute, PathElement path, ResourceServiceBuilderFactory<TableManipulationConfiguration> provider) {
                 if (operation.hasDefined(attribute.getDefinition().getName())) {
                     ModelNode addTableOperation = Util.createAddOperation(context.getCurrentAddress().append(path));
                     ModelNode parameters = operation.get(attribute.getDefinition().getName());
@@ -107,8 +110,8 @@ public class MixedKeyedJDBCStoreResourceDefinition extends JDBCStoreResourceDefi
                     context.addStep(addTableOperation, registration.getOperationHandler(PathAddress.pathAddress(path), ModelDescriptionConstants.ADD), context.getCurrentStage());
                 }
             }
-        }.addAttributes(JDBCStoreResourceDefinition.Attribute.class).addAttributes(StoreResourceDefinition.Attribute.class).register(registration);
-        new RemoveStepHandler(this.getResourceDescriptionResolver(), handler).register(registration);
+        }.register(registration);
+        new RemoveStepHandler(descriptor, handler).register(registration);
     }
 
     @Override
@@ -121,8 +124,8 @@ public class MixedKeyedJDBCStoreResourceDefinition extends JDBCStoreResourceDefi
     @Override
     public void registerAttributes(ManagementResourceRegistration registration) {
         super.registerAttributes(registration);
-        registration.registerReadWriteAttribute(Attribute.BINARY_TABLE.getDefinition(), BinaryKeyedJDBCStoreResourceDefinition.LEGACY_READ_TABLE_HANDLER, BinaryKeyedJDBCStoreResourceDefinition.LEGACY_WRITE_TABLE_HANDLER);
-        registration.registerReadWriteAttribute(Attribute.STRING_TABLE.getDefinition(), StringKeyedJDBCStoreResourceDefinition.LEGACY_READ_TABLE_HANDLER, StringKeyedJDBCStoreResourceDefinition.LEGACY_WRITE_TABLE_HANDLER);
+        registration.registerReadWriteAttribute(DeprecatedAttribute.BINARY_TABLE.getDefinition(), BinaryKeyedJDBCStoreResourceDefinition.LEGACY_READ_TABLE_HANDLER, BinaryKeyedJDBCStoreResourceDefinition.LEGACY_WRITE_TABLE_HANDLER);
+        registration.registerReadWriteAttribute(DeprecatedAttribute.STRING_TABLE.getDefinition(), StringKeyedJDBCStoreResourceDefinition.LEGACY_READ_TABLE_HANDLER, StringKeyedJDBCStoreResourceDefinition.LEGACY_WRITE_TABLE_HANDLER);
     }
 
     @Override

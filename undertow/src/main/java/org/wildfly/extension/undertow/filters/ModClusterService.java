@@ -120,14 +120,16 @@ public class ModClusterService extends FilterService {
         if(multicastAddress == null) {
             throw UndertowLogger.ROOT_LOGGER.advertiseSocketBindingRequiresMulticastAddress();
         }
-        builder.enableAdvertise()
-                .setAdvertiseAddress(advertiseSocketBinding.getValue().getSocketAddress().getAddress().getHostAddress())
-                .setAdvertiseGroup(multicastAddress.getHostAddress())
-                .setAdvertisePort(advertiseSocketBinding.getValue().getPort())
-                .setAdvertiseFrequency(advertiseFrequency)
-                .setPath(advertisePath)
-                .setProtocol(advertiseProtocol)
-                .setSecurityKey(securityKey);
+        if(advertiseFrequency > 0) {
+            builder.enableAdvertise()
+                    .setAdvertiseAddress(advertiseSocketBinding.getValue().getSocketAddress().getAddress().getHostAddress())
+                    .setAdvertiseGroup(multicastAddress.getHostAddress())
+                    .setAdvertisePort(advertiseSocketBinding.getValue().getPort())
+                    .setAdvertiseFrequency(advertiseFrequency)
+                    .setPath(advertisePath)
+                    .setProtocol(advertiseProtocol)
+                    .setSecurityKey(securityKey);
+        }
         builder.setManagementHost(managementSocketBinding.getValue().getSocketAddress().getHostName());
         builder.setManagementPort(managementSocketBinding.getValue().getSocketAddress().getPort());
 
@@ -169,7 +171,8 @@ public class ModClusterService extends FilterService {
                 }
             }
         };
-        if(predicate != null) {
+        UndertowLogger.ROOT_LOGGER.debug("HttpHandler for mod_cluster MCMP created.");
+        if (predicate != null) {
             return new PredicateHandler(predicate, theHandler, next);
         } else {
             return theHandler;

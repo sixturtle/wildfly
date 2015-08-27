@@ -35,7 +35,6 @@ import org.jboss.as.controller.OperationFailedException;
 import org.jboss.dmr.ModelNode;
 import org.jboss.msc.service.ServiceTarget;
 import org.jgroups.Channel;
-import org.wildfly.clustering.infinispan.spi.service.CacheContainerServiceNameFactory;
 import org.wildfly.clustering.jgroups.spi.ChannelFactory;
 import org.wildfly.clustering.jgroups.spi.service.ChannelBuilder;
 import org.wildfly.clustering.jgroups.spi.service.ChannelConnectorBuilder;
@@ -60,7 +59,7 @@ public class JGroupsTransportServiceHandler implements ResourceServiceHandler {
 
         new JGroupsTransportBuilder(name).configure(context, model).build(target).install();
 
-        new SiteBuilder(name).setChannelName(channel).build(target).install();
+        new SiteBuilder(name).configure(context, model).build(target).install();
 
         new BinderServiceBuilder<>(JGroupsBindingFactory.createChannelBinding(name), ChannelServiceName.CHANNEL.getServiceName(name), Channel.class).build(target).install();
         new ChannelBuilder(name).build(target).install();
@@ -90,7 +89,7 @@ public class JGroupsTransportServiceHandler implements ResourceServiceHandler {
             context.removeService(factory.getServiceName(name));
         }
 
-        for (CacheContainerServiceNameFactory factory : CacheContainerComponent.values()) {
+        for (CacheContainerComponent factory : CacheContainerComponent.values()) {
             context.removeService(factory.getServiceName(name));
         }
     }

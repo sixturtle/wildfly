@@ -30,13 +30,14 @@ import javax.management.MBeanServer;
 
 import org.infinispan.configuration.global.GlobalConfiguration;
 import org.infinispan.configuration.global.ShutdownHookBehavior;
+import org.infinispan.configuration.global.ThreadPoolConfiguration;
 import org.infinispan.configuration.global.TransportConfiguration;
 import org.infinispan.marshall.core.Ids;
 import org.jboss.as.clustering.controller.ResourceServiceBuilder;
 import org.jboss.as.clustering.dmr.ModelNodes;
 import org.jboss.as.clustering.infinispan.InfinispanLogger;
 import org.jboss.as.clustering.infinispan.MBeanServerProvider;
-import org.jboss.as.controller.ExpressionResolver;
+import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.as.jmx.MBeanServerService;
 import org.jboss.as.server.Services;
@@ -54,7 +55,7 @@ import org.jboss.msc.value.InjectedValue;
 import org.jboss.msc.value.Value;
 import org.wildfly.clustering.infinispan.spi.io.SimpleExternalizer;
 import org.wildfly.clustering.infinispan.spi.service.CacheContainerServiceName;
-import org.wildfly.clustering.infinispan.spi.service.CacheServiceNameFactory;
+import org.wildfly.clustering.infinispan.spi.service.CacheServiceName;
 import org.wildfly.clustering.service.Builder;
 
 /**
@@ -65,6 +66,13 @@ public class GlobalConfigurationBuilder implements ResourceServiceBuilder<Global
     private final InjectedValue<ModuleLoader> loader = new InjectedValue<>();
     private final InjectedValue<MBeanServer> server = new InjectedValue<>();
     private final InjectedValue<TransportConfiguration> transport = new InjectedValue<>();
+    private final InjectedValue<ThreadPoolConfiguration> asyncOperationsThreadPool = new InjectedValue<>();
+    private final InjectedValue<ThreadPoolConfiguration> expirationThreadPool = new InjectedValue<>();
+    private final InjectedValue<ThreadPoolConfiguration> listenerThreadPool = new InjectedValue<>();
+    private final InjectedValue<ThreadPoolConfiguration> persistenceThreadPool = new InjectedValue<>();
+    private final InjectedValue<ThreadPoolConfiguration> remoteCommandThreadPool = new InjectedValue<>();
+    private final InjectedValue<ThreadPoolConfiguration> stateTransferThreadPool = new InjectedValue<>();
+    private final InjectedValue<ThreadPoolConfiguration> transportThreadPool = new InjectedValue<>();
     private final String name;
 
     private volatile boolean statisticsEnabled;
@@ -80,9 +88,9 @@ public class GlobalConfigurationBuilder implements ResourceServiceBuilder<Global
     }
 
     @Override
-    public Builder<GlobalConfiguration> configure(ExpressionResolver resolver, ModelNode model) throws OperationFailedException {
-        this.module = ModelNodes.asModuleIdentifier(MODULE.getDefinition().resolveModelAttribute(resolver, model));
-        this.statisticsEnabled = STATISTICS_ENABLED.getDefinition().resolveModelAttribute(resolver, model).asBoolean();
+    public Builder<GlobalConfiguration> configure(OperationContext context, ModelNode model) throws OperationFailedException {
+        this.module = ModelNodes.asModuleIdentifier(MODULE.getDefinition().resolveModelAttribute(context, model));
+        this.statisticsEnabled = STATISTICS_ENABLED.getDefinition().resolveModelAttribute(context, model).asBoolean();
         return this;
     }
 
@@ -115,12 +123,21 @@ public class GlobalConfigurationBuilder implements ResourceServiceBuilder<Global
             throw new IllegalStateException(e);
         }
 
+        builder.transport().transportThreadPool().read(this.transportThreadPool.getValue());
+        builder.transport().remoteCommandThreadPool().read(this.remoteCommandThreadPool.getValue());
+
+        builder.asyncThreadPool().read(this.asyncOperationsThreadPool.getValue());
+        builder.expirationThreadPool().read(this.expirationThreadPool.getValue());
+        builder.listenerThreadPool().read(this.listenerThreadPool.getValue());
+        builder.stateTransferThreadPool().read(this.stateTransferThreadPool.getValue());
+        builder.persistenceThreadPool().read(this.persistenceThreadPool.getValue());
+
         builder.shutdown().hookBehavior(ShutdownHookBehavior.DONT_REGISTER);
         builder.globalJmxStatistics()
                 .enabled(this.statisticsEnabled)
                 .cacheManagerName(this.name)
                 .mBeanServerLookup(new MBeanServerProvider(this.server.getValue()))
-                .jmxDomain(CacheContainerServiceName.CACHE_CONTAINER.getServiceName(CacheServiceNameFactory.DEFAULT_CACHE).getParent().getCanonicalName())
+                .jmxDomain(CacheContainerServiceName.CACHE_CONTAINER.getServiceName(CacheServiceName.DEFAULT_CACHE).getParent().getCanonicalName())
                 .allowDuplicateDomains(true);
 
         return builder.build();
@@ -132,6 +149,13 @@ public class GlobalConfigurationBuilder implements ResourceServiceBuilder<Global
                 .addDependency(Services.JBOSS_SERVICE_MODULE_LOADER, ModuleLoader.class, this.loader)
                 .addDependency(MBeanServerService.SERVICE_NAME, MBeanServer.class, this.server)
                 .addDependency(CacheContainerComponent.TRANSPORT.getServiceName(this.name), TransportConfiguration.class, this.transport)
+                .addDependency(ThreadPoolResourceDefinition.ASYNC_OPERATIONS.getServiceName(this.name), ThreadPoolConfiguration.class, this.asyncOperationsThreadPool)
+                .addDependency(ScheduledThreadPoolResourceDefinition.EXPIRATION.getServiceName(this.name), ThreadPoolConfiguration.class, this.expirationThreadPool)
+                .addDependency(ThreadPoolResourceDefinition.LISTENER.getServiceName(this.name), ThreadPoolConfiguration.class, this.listenerThreadPool)
+                .addDependency(ThreadPoolResourceDefinition.STATE_TRANSFER.getServiceName(this.name), ThreadPoolConfiguration.class, this.stateTransferThreadPool)
+                .addDependency(ThreadPoolResourceDefinition.PERSISTENCE.getServiceName(this.name), ThreadPoolConfiguration.class, this.persistenceThreadPool)
+                .addDependency(ThreadPoolResourceDefinition.REMOTE_COMMAND.getServiceName(this.name), ThreadPoolConfiguration.class, this.remoteCommandThreadPool)
+                .addDependency(ThreadPoolResourceDefinition.TRANSPORT.getServiceName(this.name), ThreadPoolConfiguration.class, this.transportThreadPool)
                 .setInitialMode(ServiceController.Mode.ON_DEMAND)
         ;
     }

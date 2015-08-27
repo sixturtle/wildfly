@@ -46,16 +46,14 @@ import org.jboss.as.controller.registry.ManagementResourceRegistration;
 import org.jboss.as.server.AbstractDeploymentChainStep;
 import org.jboss.as.server.DeploymentProcessorTarget;
 import org.jboss.as.server.deployment.Phase;
-import org.jboss.as.server.deployment.jbossallxml.JBossAllXmlParserRegisteringProcessor;
 import org.jboss.as.threads.ThreadFactoryResolver;
 import org.jboss.as.threads.ThreadFactoryResourceDefinition;
 import org.jboss.as.threads.ThreadsServices;
 import org.jboss.as.threads.UnboundedQueueThreadPoolResourceDefinition;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
-import org.wildfly.extension.batch.deployment.BatchDependencyProcessor;
-import org.wildfly.extension.batch.deployment.BatchDeploymentDescriptorParser;
-import org.wildfly.extension.batch.deployment.BatchDeploymentResourceProcessor;
+import org.wildfly.extension.batch.jberet.deployment.BatchDependencyProcessor;
+import org.wildfly.extension.batch.jberet.deployment.BatchDeploymentResourceProcessor;
 import org.wildfly.extension.batch.deployment.BatchEnvironmentProcessor;
 import org.wildfly.extension.batch.job.repository.JobRepositoryFactory;
 import org.wildfly.extension.batch.job.repository.JobRepositoryType;
@@ -179,15 +177,11 @@ public class BatchSubsystemDefinition extends SimpleResourceDefinition {
             context.addStep(new AbstractDeploymentChainStep() {
                 public void execute(DeploymentProcessorTarget processorTarget) {
                     processorTarget.addDeploymentProcessor(BatchSubsystemDefinition.NAME,
-                            Phase.STRUCTURE, Phase.STRUCTURE_REGISTER_JBOSS_ALL_BATCH,
-                            new JBossAllXmlParserRegisteringProcessor<>(BatchDeploymentDescriptorParser.ROOT_ELEMENT,
-                                    BatchDeploymentDescriptorParser.ATTACHMENT_KEY, new BatchDeploymentDescriptorParser()));
-                    processorTarget.addDeploymentProcessor(BatchSubsystemDefinition.NAME,
                             Phase.DEPENDENCIES, Phase.DEPENDENCIES_BATCH, new BatchDependencyProcessor());
                     processorTarget.addDeploymentProcessor(BatchSubsystemDefinition.NAME,
                             Phase.POST_MODULE, Phase.POST_MODULE_BATCH_ENVIRONMENT, new BatchEnvironmentProcessor(rcPresent));
                     processorTarget.addDeploymentProcessor(BatchSubsystemDefinition.NAME,
-                            Phase.INSTALL, Phase.INSTALL_BATCH_RESOURCES, new BatchDeploymentResourceProcessor());
+                            Phase.INSTALL, Phase.INSTALL_BATCH_RESOURCES, new BatchDeploymentResourceProcessor(NAME));
 
                 }
             }, OperationContext.Stage.RUNTIME);

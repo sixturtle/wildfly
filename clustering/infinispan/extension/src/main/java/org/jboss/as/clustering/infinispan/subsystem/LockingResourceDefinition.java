@@ -24,19 +24,20 @@ package org.jboss.as.clustering.infinispan.subsystem;
 
 import org.infinispan.util.concurrent.IsolationLevel;
 import org.jboss.as.clustering.controller.AddStepHandler;
+import org.jboss.as.clustering.controller.ResourceDescriptor;
 import org.jboss.as.clustering.controller.MetricHandler;
 import org.jboss.as.clustering.controller.ReloadRequiredWriteAttributeHandler;
 import org.jboss.as.clustering.controller.RemoveStepHandler;
 import org.jboss.as.clustering.controller.ResourceServiceHandler;
 import org.jboss.as.clustering.controller.SimpleAliasEntry;
 import org.jboss.as.clustering.controller.SimpleResourceServiceHandler;
+import org.jboss.as.clustering.controller.validation.EnumValidatorBuilder;
+import org.jboss.as.clustering.controller.validation.ParameterValidatorBuilder;
 import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.ModelVersion;
 import org.jboss.as.controller.PathElement;
 import org.jboss.as.controller.SimpleAttributeDefinitionBuilder;
 import org.jboss.as.controller.client.helpers.MeasurementUnit;
-import org.jboss.as.controller.operations.validation.EnumValidator;
-import org.jboss.as.controller.operations.validation.ParameterValidator;
 import org.jboss.as.controller.registry.AttributeAccess;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
 import org.jboss.as.controller.transform.description.AttributeConverter.DefaultValueAttributeConverter;
@@ -55,22 +56,30 @@ public class LockingResourceDefinition extends ComponentResourceDefinition {
     static final PathElement LEGACY_PATH = PathElement.pathElement(PATH.getValue(), "LOCKING");
 
     enum Attribute implements org.jboss.as.clustering.controller.Attribute {
-        ACQUIRE_TIMEOUT("acquire-timeout", ModelType.LONG, new ModelNode(15000L), null),
-        CONCURRENCY("concurrency-level", ModelType.INT, new ModelNode(1000), null),
-        ISOLATION("isolation", ModelType.STRING, new ModelNode(IsolationLevel.READ_COMMITTED.name()), new EnumValidator<>(IsolationLevel.class, true, false)),
-        STRIPING("striping", ModelType.BOOLEAN, new ModelNode(false), null),
+        ACQUIRE_TIMEOUT("acquire-timeout", ModelType.LONG, new ModelNode(15000L)),
+        CONCURRENCY("concurrency-level", ModelType.INT, new ModelNode(1000)),
+        ISOLATION("isolation", ModelType.STRING, new ModelNode(IsolationLevel.READ_COMMITTED.name()), new EnumValidatorBuilder<>(IsolationLevel.class)),
+        STRIPING("striping", ModelType.BOOLEAN, new ModelNode(false)),
         ;
         private final AttributeDefinition definition;
 
-        Attribute(String name, ModelType type, ModelNode defaultValue, ParameterValidator validator) {
-            this.definition = new SimpleAttributeDefinitionBuilder(name, type)
+        Attribute(String name, ModelType type, ModelNode defaultValue) {
+            this.definition = createBuilder(name, type, defaultValue).build();
+        }
+
+        Attribute(String name, ModelType type, ModelNode defaultValue, ParameterValidatorBuilder validator) {
+            SimpleAttributeDefinitionBuilder builder = createBuilder(name, type, defaultValue);
+            this.definition = builder.setValidator(validator.configure(builder).build()).build();
+        }
+
+        private static SimpleAttributeDefinitionBuilder createBuilder(String name, ModelType type, ModelNode defaultValue) {
+            return new SimpleAttributeDefinitionBuilder(name, type)
                     .setAllowExpression(true)
                     .setAllowNull(true)
                     .setDefaultValue(defaultValue)
                     .setFlags(AttributeAccess.Flag.RESTART_RESOURCE_SERVICES)
                     .setMeasurementUnit((type == ModelType.LONG) ? MeasurementUnit.MILLISECONDS : null)
-                    .setValidator(validator)
-                    .build();
+            ;
         }
 
         @Override
@@ -96,9 +105,10 @@ public class LockingResourceDefinition extends ComponentResourceDefinition {
 
     @Override
     public void registerOperations(ManagementResourceRegistration registration) {
+        ResourceDescriptor descriptor = new ResourceDescriptor(this.getResourceDescriptionResolver()).addAttributes(Attribute.class);
         ResourceServiceHandler handler = new SimpleResourceServiceHandler<>(new LockingBuilderFactory());
-        new AddStepHandler(this.getResourceDescriptionResolver(), handler).addAttributes(Attribute.class).register(registration);
-        new RemoveStepHandler(this.getResourceDescriptionResolver(), handler).register(registration);
+        new AddStepHandler(descriptor, handler).register(registration);
+        new RemoveStepHandler(descriptor, handler).register(registration);
     }
 
     @Override

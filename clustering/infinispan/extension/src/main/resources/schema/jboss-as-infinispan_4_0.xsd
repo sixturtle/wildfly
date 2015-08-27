@@ -51,6 +51,41 @@
                     <xs:documentation>Overrides the transport characteristics for this cache container.</xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <xs:element name="async-operations-thread-pool" type="tns:thread-pool" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Defines a thread pool used for asynchronous operations.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="listener-thread-pool" type="tns:thread-pool" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Defines a thread pool used for asynchronous cache listener notifications.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="persistence-thread-pool" type="tns:thread-pool" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Defines a thread pool used for interacting with the persistent store.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="remote-command-thread-pool" type="tns:thread-pool" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Defines a thread pool used to execute remote commands.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="state-transfer-thread-pool" type="tns:thread-pool" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Defines a thread pool used for for state transfer.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="transport-thread-pool" type="tns:thread-pool" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Defines a thread pool used for asynchronous transport communication.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="expiration-thread-pool" type="tns:thread-pool" minOccurs="0" maxOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>Defines a thread pool used for expiration.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:choice maxOccurs="unbounded">
                 <xs:element name="local-cache" type="tns:local-cache">
                     <xs:annotation>
@@ -97,21 +132,6 @@
                 <xs:documentation>Indicates the default cache for this cache container.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="listener-executor" type="xs:string">
-            <xs:annotation>
-                <xs:documentation>Defines the executor used for asynchronous cache listener notifications.</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="eviction-executor" type="xs:string">
-            <xs:annotation>
-                <xs:documentation>Defines the scheduled executor used for evictions.</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="replication-queue-executor" type="xs:string">
-            <xs:annotation>
-                <xs:documentation>Defines the scheduled executor used by the asynchronous replication queue.</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
         <xs:attribute name="module" type="xs:string" default="org.jboss.as.clustering.infinispan">
             <xs:annotation>
                 <xs:documentation>Defines the module whose class loader should be used when building this cache container.</xs:documentation>
@@ -138,11 +158,6 @@
         <xs:attribute name="cluster" type="xs:string">
             <xs:annotation>
                 <xs:documentation>Defines the name for the underlying group communication cluster.</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="executor" type="xs:string">
-            <xs:annotation>
-                <xs:documentation>Defines the executor used for asynchronous transport communication.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
         <xs:attribute name="lock-timeout" type="xs:long" default="240000">
@@ -215,31 +230,6 @@
                     </xs:annotation>
                 </xs:element>
             </xs:choice>
-            <xs:element name="indexing" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>
-                        Defined indexing options for cache
-                    </xs:documentation>
-                </xs:annotation>
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="property" type="tns:property" minOccurs="0" maxOccurs="unbounded">
-                            <xs:annotation>
-                                <xs:documentation>
-                                    Property to pass on to the indexing system.
-                                </xs:documentation>
-                            </xs:annotation>
-                        </xs:element>
-                    </xs:sequence>
-                    <xs:attribute name="index" type="tns:indexing" default="NONE">
-                        <xs:annotation>
-                            <xs:documentation>
-                                The indexing mode of the cache. Defaults to NONE.
-                            </xs:documentation>
-                        </xs:annotation>
-                    </xs:attribute>
-                </xs:complexType>
-            </xs:element>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required">
             <xs:annotation>
@@ -356,13 +346,6 @@
     <xs:complexType name="clustered-cache" abstract="true">
         <xs:complexContent>
             <xs:extension base="tns:cache">
-                <xs:attribute name="async-marshalling" type="xs:boolean" default="false">
-                    <xs:annotation>
-                        <xs:documentation>
-                           Enables the use of asynchronous marshalling
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
                 <xs:attribute name="mode" type="tns:mode" use="required">
                     <xs:annotation>
                         <xs:documentation>Sets the clustered cache mode, ASYNC for asynchronous operation, or SYNC for synchronous operation.</xs:documentation>
@@ -397,9 +380,14 @@
         <xs:complexContent>
             <xs:extension base="tns:clustered-cache">
                 <xs:sequence>
+                    <xs:element name="partition-handling" type="tns:partition-handling" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>The partition handling configuration for distributed and replicated caches.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
                     <xs:element name="state-transfer" type="tns:state-transfer" minOccurs="0">
                         <xs:annotation>
-                            <xs:documentation>The state transfer configuration for distribution and replicated caches.</xs:documentation>
+                            <xs:documentation>The state transfer configuration for distributed and replicated caches.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:choice minOccurs="0">
@@ -506,25 +494,11 @@
     </xs:complexType>
 
     <xs:complexType name="write-behind">
-        <xs:attribute name="flush-lock-timeout" type="xs:int" default="1">
-            <xs:annotation>
-                <xs:documentation>
-                    Timeout to acquire the lock which guards the state to be flushed to the cache store periodically.
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
         <xs:attribute name="modification-queue-size" type="xs:int" default="1024">
             <xs:annotation>
                 <xs:documentation>
                     Maximum number of entries in the asynchronous queue. When the queue is full, the store becomes write-through.
                     until it can accept new entries
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="shutdown-timeout" type="xs:int" default="25000">
-            <xs:annotation>
-                <xs:documentation>
-                    Timeout in milliseconds to stop the cache store.
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
@@ -762,6 +736,14 @@
         <xs:attribute name="type" type="xs:string" default="BIGINT">
             <xs:annotation>
                 <xs:documentation>The type of the column used to store the cache entry or bucket timestamp.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="partition-handling">
+        <xs:attribute name="enabled" type="xs:boolean" default="false">
+            <xs:annotation>
+                <xs:documentation>If enabled, the cache will enter degraded mode upon detecting a network partition that threatens the integrity of the cache.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:complexType>
@@ -1104,4 +1086,28 @@
             </xs:enumeration>
         </xs:restriction>
     </xs:simpleType>
+
+    <xs:complexType name="thread-pool">
+        <xs:attribute name="min-threads" type="xs:int" use="optional">
+            <xs:annotation>
+                <xs:documentation>Minimum thread pool size for the thread pool.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="max-threads" type="xs:int" use="optional">
+            <xs:annotation>
+                <xs:documentation>Maximum thread pool size for the thread pool.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="queue-length" type="xs:int" use="optional">
+            <xs:annotation>
+                <xs:documentation>Maximum queue length for the thread pool.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="keepalive-time" type="xs:long" use="optional">
+            <xs:annotation>
+                <xs:documentation>Timeout in milliseconds to remove idle thread from the pool.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
 </xs:schema>

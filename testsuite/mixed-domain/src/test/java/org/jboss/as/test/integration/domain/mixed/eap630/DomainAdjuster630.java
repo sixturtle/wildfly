@@ -48,8 +48,9 @@ import org.jboss.as.test.integration.domain.mixed.DomainAdjuster;
 import org.jboss.as.test.integration.domain.mixed.LegacySubsystemConfigurationUtil;
 import org.jboss.as.weld.WeldExtension;
 import org.jboss.dmr.ModelNode;
-import org.wildfly.extension.batch.BatchSubsystemExtension;
+import org.wildfly.extension.batch.jberet.BatchSubsystemDefinition;
 import org.wildfly.extension.beanvalidation.BeanValidationExtension;
+import org.wildfly.extension.clustering.singleton.SingletonExtension;
 import org.wildfly.extension.io.IOExtension;
 import org.wildfly.extension.messaging.activemq.MessagingExtension;
 import org.wildfly.extension.requestcontroller.RequestControllerExtension;
@@ -67,13 +68,12 @@ public class DomainAdjuster630 extends DomainAdjuster {
     protected List<ModelNode> adjustForVersion(final DomainClient client, PathAddress profileAddress) throws Exception {
         final List<ModelNode> list = new ArrayList<>();
 
-        list.addAll(removeBatch(profileAddress.append(SUBSYSTEM, BatchSubsystemExtension.SUBSYSTEM_NAME)));
+        list.addAll(removeBatch(profileAddress.append(SUBSYSTEM, BatchSubsystemDefinition.NAME)));
         list.addAll(removeBeanValidation(profileAddress.append(SUBSYSTEM, BeanValidationExtension.SUBSYSTEM_NAME)));
         list.addAll(adjustEe(profileAddress.append(SUBSYSTEM, EeExtension.SUBSYSTEM_NAME)));
         list.addAll(adjustEjb3(profileAddress.append(SUBSYSTEM, EJB3Extension.SUBSYSTEM_NAME)));
         list.addAll(replaceIiopOpenJdk(client, profileAddress.append(SUBSYSTEM, IIOPExtension.SUBSYSTEM_NAME)));
         list.addAll(adjustInfinispan(profileAddress.append(SUBSYSTEM, InfinispanExtension.SUBSYSTEM_NAME)));
-        list.addAll(removeIo(profileAddress.append(SUBSYSTEM, IOExtension.SUBSYSTEM_NAME)));
         list.addAll(adjustJGroups(profileAddress.append(SUBSYSTEM, JGroupsExtension.SUBSYSTEM_NAME)));
         list.addAll(adjustRemoting(profileAddress.append(SUBSYSTEM, RemotingExtension.SUBSYSTEM_NAME)));
         list.addAll(adjustWeld(profileAddress.append(SUBSYSTEM, WeldExtension.SUBSYSTEM_NAME)));
@@ -81,7 +81,8 @@ public class DomainAdjuster630 extends DomainAdjuster {
         list.addAll(removeSecurityManager(profileAddress.append(SecurityManagerExtension.SUBSYSTEM_PATH)));
         list.addAll(replaceUndertowWithWeb(profileAddress.append(SUBSYSTEM, UndertowExtension.SUBSYSTEM_NAME)));
         list.addAll(replaceActiveMqWithMessaging(profileAddress.append(SUBSYSTEM, MessagingExtension.SUBSYSTEM_NAME)));
-
+        list.addAll(removeSingletonDeployer(profileAddress.append(SUBSYSTEM, SingletonExtension.SUBSYSTEM_NAME)));
+        list.addAll(removeIo(profileAddress.append(SUBSYSTEM, IOExtension.SUBSYSTEM_NAME)));
 
         //Temporary workaround, something weird is going on in infinispan/jgroups so let's get rid of those for now
         //TODO Reenable these subsystems, it is important to see if we boot with them configured although the tests don't use clustering
@@ -92,12 +93,11 @@ public class DomainAdjuster630 extends DomainAdjuster {
     }
 
 
-
     private Collection<? extends ModelNode> removeBatch(final PathAddress subsystem) {
         final List<ModelNode> list = new ArrayList<>();
         //batch and extension don't exist
         list.add(createRemoveOperation(subsystem));
-        list.add(createRemoveOperation(PathAddress.pathAddress(EXTENSION, "org.wildfly.extension.batch")));
+        list.add(createRemoveOperation(PathAddress.pathAddress(EXTENSION, "org.wildfly.extension.batch.jberet")));
         return list;
     }
 
@@ -107,6 +107,15 @@ public class DomainAdjuster630 extends DomainAdjuster {
         //bean-validation and extension don't exist
         list.add(createRemoveOperation(subsystem));
         list.add(createRemoveOperation(PathAddress.pathAddress(EXTENSION, "org.wildfly.extension.bean-validation")));
+        return list;
+    }
+
+
+    private Collection<? extends ModelNode> removeSingletonDeployer(PathAddress subsystem) {
+        List<ModelNode> list = new ArrayList<>(2);
+        //singleton subsystem and extension doesn't exist
+        list.add(createRemoveOperation(subsystem));
+        list.add(createRemoveOperation(PathAddress.pathAddress(EXTENSION, "org.wildfly.extension.clustering.singleton")));
         return list;
     }
 
@@ -213,7 +222,6 @@ public class DomainAdjuster630 extends DomainAdjuster {
         list.add(createRemoveOperation(udp.append("protocol", "UFC")));
         list.add(createRemoveOperation(udp.append("protocol", "MFC")));
         list.add(createRemoveOperation(udp.append("protocol", "FRAG2")));
-        list.add(createRemoveOperation(udp.append("protocol", "RSVP")));
         list.add(createAddOperation(udp.append("protocol", "pbcast.NAKACK")));
         list.add(createAddOperation(udp.append("protocol", "UNICAST2")));
         list.add(createAddOperation(udp.append("protocol", "pbcast.STABLE")));
@@ -231,7 +239,6 @@ public class DomainAdjuster630 extends DomainAdjuster {
         list.add(createRemoveOperation(tcp.append("protocol", "pbcast.GMS")));
         list.add(createRemoveOperation(tcp.append("protocol", "MFC")));
         list.add(createRemoveOperation(tcp.append("protocol", "FRAG2")));
-        list.add(createRemoveOperation(tcp.append("protocol", "RSVP")));
         list.add(createAddOperation(tcp.append("protocol", "pbcast.NAKACK")));
         list.add(createAddOperation(tcp.append("protocol", "UNICAST2")));
         list.add(createAddOperation(tcp.append("protocol", "pbcast.STABLE")));

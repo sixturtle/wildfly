@@ -35,7 +35,7 @@ import org.infinispan.configuration.cache.PersistenceConfiguration;
 import org.infinispan.configuration.cache.StoreConfigurationBuilder;
 import org.jboss.as.clustering.controller.ResourceServiceBuilder;
 import org.jboss.as.clustering.dmr.ModelNodes;
-import org.jboss.as.controller.ExpressionResolver;
+import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.dmr.ModelNode;
 import org.jboss.msc.service.ServiceBuilder;
@@ -68,20 +68,20 @@ public abstract class StoreBuilder extends CacheComponentBuilder<PersistenceConf
     }
 
     @Override
-    public Builder<PersistenceConfiguration> configure(ExpressionResolver resolver, ModelNode model) throws OperationFailedException {
-        this.storeBuilder = this.createStore(resolver, model);
-        this.storeBuilder.persistence().passivation(PASSIVATION.getDefinition().resolveModelAttribute(resolver, model).asBoolean());
-        this.storeBuilder.fetchPersistentState(FETCH_STATE.getDefinition().resolveModelAttribute(resolver, model).asBoolean())
-                .preload(PRELOAD.getDefinition().resolveModelAttribute(resolver, model).asBoolean())
-                .purgeOnStartup(PURGE.getDefinition().resolveModelAttribute(resolver, model).asBoolean())
-                .shared(SHARED.getDefinition().resolveModelAttribute(resolver, model).asBoolean())
-                .singleton().enabled(SINGLETON.getDefinition().resolveModelAttribute(resolver, model).asBoolean())
-                .withProperties(ModelNodes.asProperties(PROPERTIES.getDefinition().resolveModelAttribute(resolver, model)))
+    public Builder<PersistenceConfiguration> configure(OperationContext context, ModelNode model) throws OperationFailedException {
+        this.storeBuilder = this.createStore(context, model);
+        this.storeBuilder.persistence().passivation(PASSIVATION.getDefinition().resolveModelAttribute(context, model).asBoolean());
+        this.storeBuilder.fetchPersistentState(FETCH_STATE.getDefinition().resolveModelAttribute(context, model).asBoolean())
+                .preload(PRELOAD.getDefinition().resolveModelAttribute(context, model).asBoolean())
+                .purgeOnStartup(PURGE.getDefinition().resolveModelAttribute(context, model).asBoolean())
+                .shared(SHARED.getDefinition().resolveModelAttribute(context, model).asBoolean())
+                .singleton().enabled(SINGLETON.getDefinition().resolveModelAttribute(context, model).asBoolean())
+                .withProperties(ModelNodes.asProperties(PROPERTIES.getDefinition().resolveModelAttribute(context, model)))
         ;
         return this;
     }
 
-    abstract StoreConfigurationBuilder<?, ?> createStore(ExpressionResolver resolver, ModelNode model) throws OperationFailedException;
+    abstract StoreConfigurationBuilder<?, ?> createStore(OperationContext context, ModelNode model) throws OperationFailedException;
 
     @Override
     public PersistenceConfiguration getValue() {

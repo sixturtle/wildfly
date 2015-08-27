@@ -22,10 +22,7 @@
 
 package org.jboss.as.clustering.infinispan.subsystem;
 
-import static org.jboss.as.clustering.infinispan.subsystem.ClusteredCacheResourceDefinition.Attribute.ASYNC_MARSHALLING;
-import static org.jboss.as.clustering.infinispan.subsystem.ClusteredCacheResourceDefinition.Attribute.QUEUE_FLUSH_INTERVAL;
-import static org.jboss.as.clustering.infinispan.subsystem.ClusteredCacheResourceDefinition.Attribute.QUEUE_SIZE;
-import static org.jboss.as.clustering.infinispan.subsystem.ClusteredCacheResourceDefinition.Attribute.REMOTE_TIMEOUT;
+import static org.jboss.as.clustering.infinispan.subsystem.ClusteredCacheResourceDefinition.Attribute.*;
 
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ClusteringConfiguration;
@@ -33,7 +30,7 @@ import org.infinispan.configuration.cache.ClusteringConfigurationBuilder;
 import org.infinispan.configuration.cache.Configuration;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.jboss.as.clustering.dmr.ModelNodes;
-import org.jboss.as.controller.ExpressionResolver;
+import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.dmr.ModelNode;
 import org.wildfly.clustering.service.Builder;
@@ -54,25 +51,24 @@ public class ClusteredCacheBuilder extends CacheConfigurationBuilder {
     }
 
     @Override
-    public Builder<Configuration> configure(ExpressionResolver resolver, ModelNode model) throws OperationFailedException {
-        Mode mode = ModelNodes.asEnum(ClusteredCacheResourceDefinition.Attribute.MODE.getDefinition().resolveModelAttribute(resolver, model), Mode.class);
+    public Builder<Configuration> configure(OperationContext context, ModelNode model) throws OperationFailedException {
+        Mode mode = ModelNodes.asEnum(ClusteredCacheResourceDefinition.Attribute.MODE.getDefinition().resolveModelAttribute(context, model), Mode.class);
         ClusteringConfigurationBuilder builder = new ConfigurationBuilder().clustering().cacheMode(mode.apply(this.mode));
 
         if (mode.isSynchronous()) {
-            builder.sync().replTimeout(REMOTE_TIMEOUT.getDefinition().resolveModelAttribute(resolver, model).asLong());
+            builder.sync().replTimeout(REMOTE_TIMEOUT.getDefinition().resolveModelAttribute(context, model).asLong());
         } else {
-            int queueSize = QUEUE_SIZE.getDefinition().resolveModelAttribute(resolver, model).asInt();
+            int queueSize = QUEUE_SIZE.getDefinition().resolveModelAttribute(context, model).asInt();
 
             builder.async()
-                    .asyncMarshalling(ASYNC_MARSHALLING.getDefinition().resolveModelAttribute(resolver, model).asBoolean())
                     .useReplQueue(queueSize > 0)
-                    .replQueueInterval(QUEUE_FLUSH_INTERVAL.getDefinition().resolveModelAttribute(resolver, model).asLong())
+                    .replQueueInterval(QUEUE_FLUSH_INTERVAL.getDefinition().resolveModelAttribute(context, model).asLong())
                     .replQueueMaxElements(queueSize)
             ;
         }
         this.clustering = builder.create();
 
-        return super.configure(resolver, model);
+        return super.configure(context, model);
     }
 
     @Override

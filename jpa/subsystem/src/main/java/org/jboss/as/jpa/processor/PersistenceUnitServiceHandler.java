@@ -943,15 +943,35 @@ public class PersistenceUnitServiceHandler {
          * locate persistence provider in specified static module
          */
         if (configuredPersistenceProviderModule != null) {
-            try {
-                List<PersistenceProvider> providers = PersistenceProviderLoader.loadProviderModuleByName(configuredPersistenceProviderModule);
-                PersistenceProviderDeploymentHolder.savePersistenceProviderInDeploymentUnit(deploymentUnit, providers, null);
-                PersistenceProvider provider = getProviderByName(pu, providers);
-                if (provider != null) {
+            List<PersistenceProvider> providers;
+            if (Configuration.PROVIDER_MODULE_APPLICATION_SUPPLIED.equals(configuredPersistenceProviderModule)) {
+                try {
+                    // load the persistence provider from the application deployment
+                    final ModuleClassLoader classLoader = deploymentUnit.getAttachment(Attachments.MODULE).getClassLoader();
+                    PersistenceProvider provider = PersistenceProviderLoader.loadProviderFromDeployment(classLoader, persistenceProviderClassName);
+                    providers = new ArrayList<>();
+                    providers.add(provider);
+                    PersistenceProviderDeploymentHolder.savePersistenceProviderInDeploymentUnit(deploymentUnit, providers, null);
                     return provider;
+
+                } catch (ClassNotFoundException e) {
+                    throw JpaLogger.ROOT_LOGGER.cannotDeployApp(e, persistenceProviderClassName);
+                } catch (InstantiationException e) {
+                    throw JpaLogger.ROOT_LOGGER.cannotDeployApp(e, persistenceProviderClassName);
+                } catch (IllegalAccessException e) {
+                    throw JpaLogger.ROOT_LOGGER.cannotDeployApp(e, persistenceProviderClassName);
                 }
-            } catch (ModuleLoadException e) {
-                throw JpaLogger.ROOT_LOGGER.cannotLoadPersistenceProviderModule(e, configuredPersistenceProviderModule, persistenceProviderClassName);
+            } else {
+                try {
+                    providers = PersistenceProviderLoader.loadProviderModuleByName(configuredPersistenceProviderModule);
+                    PersistenceProviderDeploymentHolder.savePersistenceProviderInDeploymentUnit(deploymentUnit, providers, null);
+                    PersistenceProvider provider = getProviderByName(pu, providers);
+                    if (provider != null) {
+                        return provider;
+                    }
+                } catch (ModuleLoadException e) {
+                    throw JpaLogger.ROOT_LOGGER.cannotLoadPersistenceProviderModule(e, configuredPersistenceProviderModule, persistenceProviderClassName);
+                }
             }
         }
 
@@ -985,7 +1005,11 @@ public class PersistenceUnitServiceHandler {
     private static PersistenceProvider getProviderByName(PersistenceUnitMetadata pu, List<PersistenceProvider> providers) {
         String providerName = pu.getPersistenceProviderClassName();
         for (PersistenceProvider provider : providers) {
-            if (provider.getClass().getName().equals(providerName)) {
+            if (providerName == null ||
+                    provider.getClass().getName().equals(providerName) ||
+                    // WFLY-4931 allow legacy Hibernate persistence provider name org.hibernate.ejb.HibernatePersistence to be used.
+                    (provider.getClass().getName().equals(Configuration.PROVIDER_CLASS_DEFAULT) && providerName.equals(Configuration.PROVIDER_CLASS_HIBERNATE4_1))
+                    ) {
                 return provider;                    // return the provider that matched classname
             }
         }

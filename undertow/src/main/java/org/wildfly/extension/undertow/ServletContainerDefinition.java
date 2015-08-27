@@ -36,6 +36,7 @@ import org.jboss.as.controller.SimpleAttributeDefinition;
 import org.jboss.as.controller.SimpleAttributeDefinitionBuilder;
 import org.jboss.as.controller.client.helpers.MeasurementUnit;
 import org.jboss.as.controller.operations.validation.EnumValidator;
+import org.jboss.as.controller.operations.validation.IntRangeValidator;
 import org.jboss.as.controller.registry.AttributeAccess;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
@@ -95,7 +96,7 @@ class ServletContainerDefinition extends PersistentResourceDefinition {
                     .build();
 
     protected static final AttributeDefinition DEFAULT_SESSION_TIMEOUT =
-            new SimpleAttributeDefinitionBuilder("default-session-timeout", ModelType.INT, true)
+            new SimpleAttributeDefinitionBuilder(Constants.DEFAULT_SESSION_TIMEOUT, ModelType.INT, true)
                     .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
                     .setAllowExpression(true)
                     .setMeasurementUnit(MeasurementUnit.MINUTES)
@@ -116,6 +117,21 @@ class ServletContainerDefinition extends PersistentResourceDefinition {
                     .setAllowExpression(true)
                     .build(); //30 minutes
 
+    protected static final AttributeDefinition PROACTIVE_AUTHENTICATION =
+            new SimpleAttributeDefinitionBuilder(Constants.PROACTIVE_AUTHENTICATION, ModelType.BOOLEAN, true)
+                    .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
+                    .setDefaultValue(new ModelNode(false))
+                    .setAllowExpression(true)
+                    .build();
+
+    protected static final AttributeDefinition SESSION_ID_LENGTH =
+            new SimpleAttributeDefinitionBuilder(Constants.SESSION_ID_LENGTH, ModelType.INT, true)
+                    .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
+                    .setAllowExpression(true)
+                    .setValidator(new IntRangeValidator(20, 200, true, true))
+                    .setDefaultValue(new ModelNode(30))
+                    .build(); //30 minutes
+
     private static final List<? extends PersistentResourceDefinition> CHILDREN;
     static final Collection<AttributeDefinition> ATTRIBUTES = Arrays.asList(
             ALLOW_NON_STANDARD_WRAPPERS,
@@ -127,7 +143,9 @@ class ServletContainerDefinition extends PersistentResourceDefinition {
             EAGER_FILTER_INIT,
             DEFAULT_SESSION_TIMEOUT,
             DISABLE_CACHING_FOR_SECURED_PAGES,
-            DIRECTORY_LISTING
+            DIRECTORY_LISTING,
+            PROACTIVE_AUTHENTICATION,
+            SESSION_ID_LENGTH
             );
 
     static final ServletContainerDefinition INSTANCE = new ServletContainerDefinition();

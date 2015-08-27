@@ -75,6 +75,7 @@
         <xs:attribute name="tcp-keep-alive" type="xs:boolean"/>
         <xs:attribute name="read-timeout" type="xs:long"/>
         <xs:attribute name="write-timeout" type="xs:long"/>
+        <xs:attribute name="max-connections" type="xs:int"/>
     </xs:complexType>
 
     <xs:complexType name="listener-type">
@@ -160,6 +161,8 @@
                 <xs:attribute name="enabled-protocols" use="optional" type="xs:string"/>
                 <xs:attribute name="enable-http2" use="optional" type="xs:string"/>
                 <xs:attribute name="enable-spdy" use="optional" type="xs:string"/>
+                <xs:attribute name="ssl-session-cache-size" use="optional" type="xs:string"/>
+                <xs:attribute name="ssl-session-timeout" use="optional" type="xs:string"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -202,6 +205,8 @@
         <xs:attribute name="default-session-timeout" type="xs:integer" use="optional" default="30"/>
         <xs:attribute name="disable-caching-for-secured-pages" type="xs:boolean" use="optional" default="true"/>
         <xs:attribute name="directory-listing" type="xs:boolean" use="optional" />
+        <xs:attribute name="proactive-authentication" type="xs:string" use="optional" default="false" />
+        <xs:attribute name="session-id-length" type="xs:int" use="optional" default="30" />
     </xs:complexType>
 
     <xs:complexType name="mime-mappingsType">
@@ -524,5 +529,6 @@
         <xs:attribute name="connection-idle-timeout" type="xs:int" use="optional" />
         <xs:attribute name="request-queue-size" type="xs:int" use="optional" />
         <xs:attribute name="security-realm" type="xs:string" use="optional" />
+        <xs:attribute name="use-alias" type="xs:string" use="optional" default="false" />
     </xs:complexType>
 </xs:schema>
