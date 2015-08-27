@@ -4113,7 +4113,7 @@
                 </exclusions>
             </dependency>
             <dependency>
-                <groupId>com.barbon</groupId>
+                <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-cachestore-redis</artifactId>
                 <version>${version.org.infinispan}</version>
             </dependency>
