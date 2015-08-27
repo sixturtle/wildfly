@@ -352,6 +352,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
         </dependency>
@@ -2071,12 +2076,24 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.barbon</groupId>
+            <groupId>org.infinispan</groupId>
             <artifactId>infinispan-cachestore-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>

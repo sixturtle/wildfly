@@ -30,6 +30,6 @@
     </resources>
 
     <dependencies>
-        <module name="org.apache.commons.pool"/>
+        <module name="org.apache.commons.pool2"/>
     </dependencies>
 </module>

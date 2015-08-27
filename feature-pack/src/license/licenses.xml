@@ -202,6 +202,17 @@
       </licenses>
     </dependency>
     <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-pool2</artifactId>
+      <licenses>
+        <license>
+          <name>Apache Software License, Version 2.0</name>
+          <url>http://repository.jboss.org/licenses/apache-2.0.txt</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
+    </dependency>
+    <dependency>
       <groupId>dom4j</groupId>
       <artifactId>dom4j</artifactId>
       <licenses>
@@ -1186,12 +1197,12 @@
       </licenses>
     </dependency>
     <dependency>
-      <groupId>com.barbon</groupId>
+      <groupId>org.infinispan</groupId>
       <artifactId>infinispan-cachestore-redis</artifactId>
       <licenses>
         <license>
-          <name>Closed source</name>
-          <url>http://www.barbon.com</url>
+          <name>Apache Software License, Version 2.0</name>
+          <url>http://repository.jboss.org/licenses/apache-2.0.txt</url>
           <distribution>repo</distribution>
         </license>
       </licenses>

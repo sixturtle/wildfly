@@ -106,7 +106,7 @@
             <artifactId>infinispan-cachestore-remote</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.barbon</groupId>
+            <groupId>org.infinispan</groupId>
             <artifactId>infinispan-cachestore-redis</artifactId>
         </dependency>
         <dependency>

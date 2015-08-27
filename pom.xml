@@ -97,6 +97,7 @@
         <version.commons-collections>3.2.1</version.commons-collections>
         <version.commons-digester>1.8</version.commons-digester>
         <version.commons-pool>1.6</version.commons-pool>
+        <version.commons-pool2>2.3</version.commons-pool2>
         <version.dom4j>1.6.1</version.dom4j>
         <version.gnu.getopt>1.0.13</version.gnu.getopt>
         <version.groovy-all>2.4.3</version.groovy-all>
@@ -1595,6 +1596,12 @@
                 <groupId>commons-pool</groupId>
                 <artifactId>commons-pool</artifactId>
                 <version>${version.commons-pool}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${version.commons-pool2}</version>
             </dependency>
 
             <dependency>
