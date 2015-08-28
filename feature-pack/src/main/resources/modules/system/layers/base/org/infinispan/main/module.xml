@@ -35,6 +35,7 @@
         <module name="net.jcip"/>
         <module name="org.infinispan.cachestore.jdbc" optional="true"/>
         <module name="org.infinispan.cachestore.remote" optional="true"/>
+        <module name="org.infinispan.cachestore.redis" optional="true"/>
         <module name="org.infinispan.client.hotrod" optional="true"/>
         <module name="org.infinispan.commons"/>
         <module name="org.infinispan.query" services="import" optional="true"/>

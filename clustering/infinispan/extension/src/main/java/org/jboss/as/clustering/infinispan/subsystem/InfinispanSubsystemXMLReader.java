@@ -175,7 +175,7 @@ public class InfinispanSubsystemXMLReader implements XMLElementReader<List<Model
                 pool -> operations.put(address.append(pool.getPathElement()), Util.createAddOperation(address.append(pool.getPathElement())))
         );
         Stream.of(ScheduledThreadPoolResourceDefinition.values()).forEach(
-                pool -> operations.put(address.append(pool.getPathElement()), Util.createAddOperation(address.append(pool.getPathElement())))
+            pool -> operations.put(address.append(pool.getPathElement()), Util.createAddOperation(address.append(pool.getPathElement())))
         );
 
         while (reader.hasNext() && (reader.nextTag() != XMLStreamConstants.END_ELEMENT)) {
@@ -639,6 +639,10 @@ public class InfinispanSubsystemXMLReader implements XMLElementReader<List<Model
             }
             case REMOTE_STORE: {
                 this.parseRemoteStore(reader, cacheAddress, operations);
+                break;
+            }
+            case REDIS_STORE: {
+                this.parseRedisStore(reader, cacheAddress, operations);
                 break;
             }
             case JDBC_STORE: {
@@ -1155,6 +1159,67 @@ public class InfinispanSubsystemXMLReader implements XMLElementReader<List<Model
 
         if (!operation.hasDefined(RemoteStoreResourceDefinition.Attribute.SOCKET_BINDINGS.getDefinition().getName())) {
             throw ParseUtils.missingRequired(reader, Collections.singleton(XMLAttribute.REMOTE_SERVERS.getLocalName()));
+        }
+    }
+
+    private void parseRedisStore(XMLExtendedStreamReader reader, PathAddress cacheAddress, Map<PathAddress, ModelNode> operations) throws XMLStreamException {
+        PathAddress address = cacheAddress.append(RedisStoreResourceDefinition.PATH);
+        ModelNode operation = Util.createAddOperation(address);
+        operations.put(cacheAddress.append(StoreResourceDefinition.WILDCARD_PATH), operation);
+
+        this.addStoreOperations(address, operations);
+
+        for (int i = 0; i < reader.getAttributeCount(); i++) {
+            XMLAttribute attribute = XMLAttribute.forName(reader.getAttributeLocalName(i));
+            switch (attribute) {
+                case SOCKET_TIMEOUT: {
+                    readAttribute(reader, i, operation, RedisStoreResourceDefinition.Attribute.SOCKET_TIMEOUT);
+                    break;
+                }
+                case REDIS_SERVERS: {
+                    if (this.schema.since(InfinispanSchema.VERSION_4_0)) {
+                        for (String value : reader.getListAttributeValue(i)) {
+                            setAttribute(reader, value, operation, RedisStoreResourceDefinition.Attribute.SOCKET_BINDINGS);
+                        }
+                        break;
+                    }
+                }
+                default: {
+                    this.parseStoreAttribute(reader, i, operation);
+                }
+            }
+        }
+
+        while (reader.hasNext() && (reader.nextTag() != XMLStreamConstants.END_ELEMENT)) {
+            XMLElement element = XMLElement.forName(reader.getLocalName());
+            switch (element) {
+                case REDIS_SERVER: {
+                    if (this.schema.since(InfinispanSchema.VERSION_4_0)) {
+                        throw ParseUtils.unexpectedElement(reader);
+                    }
+                    for (int i = 0; i < reader.getAttributeCount(); i++) {
+                        XMLAttribute attribute = XMLAttribute.forName(reader.getAttributeLocalName(i));
+                        switch (attribute) {
+                            case OUTBOUND_SOCKET_BINDING: {
+                                readAttribute(reader, i, operation, RedisStoreResourceDefinition.Attribute.SOCKET_BINDINGS);
+                                break;
+                            }
+                            default: {
+                                throw ParseUtils.unexpectedAttribute(reader, i);
+                            }
+                        }
+                    }
+                    ParseUtils.requireNoContent(reader);
+                    break;
+                }
+                default: {
+                    this.parseStoreElement(reader, address, operations);
+                }
+            }
+        }
+
+        if (!operation.hasDefined(RedisStoreResourceDefinition.Attribute.SOCKET_BINDINGS.getDefinition().getName())) {
+            throw ParseUtils.missingRequired(reader, Collections.singleton(XMLAttribute.REDIS_SERVERS.getLocalName()));
         }
     }
 

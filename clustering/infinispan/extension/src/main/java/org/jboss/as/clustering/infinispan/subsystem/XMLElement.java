@@ -72,6 +72,8 @@ public enum XMLElement {
     @Deprecated REHASHING("rehashing"),
     REMOTE_SERVER("remote-server"),
     REMOTE_STORE("remote-store"),
+    REDIS_STORE("redis-store"),
+    REDIS_SERVER("redis-server"),
     REPLICATED_CACHE(ReplicatedCacheResourceDefinition.WILDCARD_PATH),
     STATE_TRANSFER(StateTransferResourceDefinition.PATH),
     STATE_TRANSFER_THREAD_POOL("state-transfer-thread-pool"),

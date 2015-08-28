@@ -258,6 +258,15 @@ public class InfinispanSubsystemXMLWriter implements XMLElementWriter<SubsystemM
             writer.writeEndElement();
         }
 
+        if (cache.hasDefined(RedisStoreResourceDefinition.PATH.getKeyValuePair())) {
+            ModelNode store = cache.get(RedisStoreResourceDefinition.PATH.getKeyValuePair());
+            writer.writeStartElement(XMLElement.REDIS_STORE.getLocalName());
+            writeAttributes(writer, store, RedisStoreResourceDefinition.Attribute.class);
+            writeAttributes(writer, store, storeAttributes);
+            writeStoreElements(writer, store);
+            writer.writeEndElement();
+        }
+
         if (cache.hasDefined(PartitionHandlingResourceDefinition.PATH.getKeyValuePair())) {
             ModelNode partitionHandling = cache.get(PartitionHandlingResourceDefinition.PATH.getKeyValuePair());
             EnumSet<PartitionHandlingResourceDefinition.Attribute> attributes = EnumSet.allOf(PartitionHandlingResourceDefinition.Attribute.class);

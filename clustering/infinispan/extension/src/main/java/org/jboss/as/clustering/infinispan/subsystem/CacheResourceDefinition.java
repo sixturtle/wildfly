@@ -180,6 +180,7 @@ public class CacheResourceDefinition extends SimpleResourceDefinition implements
         MixedKeyedJDBCStoreResourceDefinition.buildTransformation(version, builder);
         StringKeyedJDBCStoreResourceDefinition.buildTransformation(version, builder);
         RemoteStoreResourceDefinition.buildTransformation(version, builder);
+        RedisStoreResourceDefinition.buildTransformation(version, builder);
         CustomStoreResourceDefinition.buildTransformation(version, builder);
     }
 
@@ -216,6 +217,7 @@ public class CacheResourceDefinition extends SimpleResourceDefinition implements
         new MixedKeyedJDBCStoreResourceDefinition(this.allowRuntimeOnlyRegistration).register(registration);
         new StringKeyedJDBCStoreResourceDefinition(this.allowRuntimeOnlyRegistration).register(registration);
         new RemoteStoreResourceDefinition(this.allowRuntimeOnlyRegistration).register(registration);
+        new RedisStoreResourceDefinition(this.allowRuntimeOnlyRegistration).register(registration);
     }
 
     @Override

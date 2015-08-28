@@ -99,6 +99,7 @@ public enum XMLAttribute {
     REMOTE_SERVERS(RemoteStoreResourceDefinition.Attribute.SOCKET_BINDINGS),
     REMOTE_SITE(BackupForResourceDefinition.Attribute.SITE),
     REMOTE_TIMEOUT(ClusteredCacheResourceDefinition.Attribute.REMOTE_TIMEOUT),
+    REDIS_SERVERS(RedisStoreResourceDefinition.Attribute.SOCKET_BINDINGS),
     @Deprecated REPLICATION_QUEUE_EXECUTOR(CacheContainerResourceDefinition.ExecutorAttribute.REPLICATION_QUEUE),
     SEGMENTS(DistributedCacheResourceDefinition.Attribute.SEGMENTS),
     SHARED(StoreResourceDefinition.Attribute.SHARED),
