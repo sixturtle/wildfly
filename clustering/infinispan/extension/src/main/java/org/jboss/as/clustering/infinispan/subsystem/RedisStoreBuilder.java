@@ -24,6 +24,9 @@ import java.util.List;
 
 import static org.jboss.as.clustering.infinispan.subsystem.RedisStoreResourceDefinition.Attribute.*;
 
+/**
+ * @author Simon Paulger
+ */
 public class RedisStoreBuilder extends StoreBuilder {
     private final List<ValueDependency<OutboundSocketBinding>> bindings = new LinkedList<>();
     private volatile RedisStoreConfigurationBuilder storeBuilder;

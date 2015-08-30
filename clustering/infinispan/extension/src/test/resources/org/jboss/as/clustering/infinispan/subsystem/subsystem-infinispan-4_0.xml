@@ -60,6 +60,13 @@
                 <write-behind modification-queue-size="2048" thread-pool-size="1"/>
             </file-store>
         </local-cache>
+        <local-cache name="redis" module="org.infinispan" statistics-enabled="true">
+            <locking acquire-timeout="30000" concurrency-level="2000" isolation="NONE" striping="true"/>
+            <transaction mode="BATCH" stop-timeout="60000" locking="OPTIMISTIC"/>
+            <eviction max-entries="20000" strategy="LIRS"/>
+            <expiration interval="10000" lifespan="10" max-idle="10"/>
+            <redis-store fetch-state="false" passivation="false" purge="false" shared="true" singleton="false" redis-servers="redis-server-1"/>
+        </local-cache>
         <invalidation-cache name="invalid" mode="ASYNC" queue-flush-interval="10" queue-size="1000" statistics-enabled="true">
             <locking acquire-timeout="30000" concurrency-level="2000" isolation="READ_UNCOMMITTED" striping="true"/>
             <transaction mode="NON_XA" stop-timeout="60000" locking="OPTIMISTIC"/>

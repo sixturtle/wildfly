@@ -8,7 +8,7 @@ import org.jboss.as.clustering.controller.RemoveStepHandler;
 import org.jboss.as.clustering.controller.RequiredCapability;
 import org.jboss.as.clustering.controller.ResourceDescriptor;
 import org.jboss.as.clustering.controller.ResourceServiceHandler;
-//import org.jboss.as.clustering.controller.SimpleAliasEntry;
+import org.jboss.as.clustering.controller.SimpleAliasEntry;
 import org.jboss.as.clustering.controller.SimpleResourceServiceHandler;
 import org.jboss.as.controller.AttributeDefinition;
 import org.jboss.as.controller.ModelVersion;
@@ -25,6 +25,11 @@ import org.jboss.as.network.OutboundSocketBinding;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
 
+/**
+ * Resource description for the addressable resource /subsystem=infinispan/cache-container=X/cache=Y/redis-store=REDIS_STORE
+ *
+ * @author Simon Paulger
+ */
 public class RedisStoreResourceDefinition extends StoreResourceDefinition {
     static final PathElement LEGACY_PATH = PathElement.pathElement("redis-store", "REDIS_STORE");
     static final PathElement PATH = pathElement("redis");
@@ -63,7 +68,7 @@ public class RedisStoreResourceDefinition extends StoreResourceDefinition {
                 .setAllowNull(true)
                 .setDefaultValue(defaultValue)
                 .setFlags(AttributeAccess.Flag.RESTART_RESOURCE_SERVICES)
-                .setMeasurementUnit((type == ModelType.LONG) ? MeasurementUnit.MILLISECONDS : null)
+                .setMeasurementUnit((type == ModelType.INT) ? MeasurementUnit.MILLISECONDS : null)
                 .build();
         }
 
@@ -108,8 +113,6 @@ public class RedisStoreResourceDefinition extends StoreResourceDefinition {
 
     @Override
     public void register(ManagementResourceRegistration registration) {
-        registration.registerSubModel(this);
-
-//        registration.registerAlias(LEGACY_PATH, new SimpleAliasEntry(registration.registerSubModel(this)));
+        registration.registerAlias(LEGACY_PATH, new SimpleAliasEntry(registration.registerSubModel(this)));
     }
 }

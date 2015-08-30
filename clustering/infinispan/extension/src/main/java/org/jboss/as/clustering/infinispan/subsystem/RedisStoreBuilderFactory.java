@@ -5,6 +5,9 @@ import org.jboss.as.clustering.controller.ResourceServiceBuilder;
 import org.jboss.as.clustering.controller.ResourceServiceBuilderFactory;
 import org.jboss.as.controller.PathAddress;
 
+/**
+ * @author Simon Paulger
+ */
 public class RedisStoreBuilderFactory implements ResourceServiceBuilderFactory<PersistenceConfiguration> {
     @Override
     public ResourceServiceBuilder<PersistenceConfiguration> createBuilder(PathAddress address) {
