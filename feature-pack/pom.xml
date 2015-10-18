@@ -30,7 +30,7 @@
     <parent>
         <groupId>org.wildfly</groupId>
         <artifactId>wildfly-parent</artifactId>
-        <version>10.0.0.CR1-SNAPSHOT</version>
+        <version>10.0.0.CR2</version>
     </parent>
 
     <artifactId>wildfly-feature-pack</artifactId>
@@ -480,7 +480,7 @@
         <dependency>
             <groupId>org.jboss.ws.cxf</groupId>
             <artifactId>jbossws-cxf-resources</artifactId>
-            <classifier>wildfly900</classifier>
+            <classifier>wildfly1000</classifier>
         </dependency>
 
         <dependency>
@@ -1730,15 +1730,19 @@
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-memory</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-queryparser</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-queries</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-misc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-backward-codecs</artifactId>
         </dependency>
 
         <dependency>
@@ -2103,14 +2107,6 @@
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-directory-provider</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-lucene-directory</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.javassist</groupId>
@@ -2301,7 +2297,17 @@
 
         <dependency>
             <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-clustering-marshalling</artifactId>
+            <artifactId>wildfly-clustering-marshalling-api</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-clustering-marshalling-jboss</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>*</groupId>
@@ -2416,6 +2422,16 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-configadmin</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>org.jboss.hal</groupId>
             <artifactId>release-stream</artifactId>

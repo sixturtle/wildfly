@@ -82,7 +82,6 @@ public class StatefulTimeoutTestCase extends ClusterAbstractTestCase {
         war.addPackage(StatefulServlet.class.getPackage());
         war.addPackage(EJBDirectory.class.getPackage());
         war.setWebXML(StatefulServlet.class.getPackage(), "web.xml");
-        log.info(war.toString(true));
         return war;
     }
 
@@ -97,7 +96,7 @@ public class StatefulTimeoutTestCase extends ClusterAbstractTestCase {
         URI uri1 = StatefulServlet.createURI(baseURL1, MODULE_NAME, TimeoutIncrementorBean.class.getSimpleName());
         URI uri2 = StatefulServlet.createURI(baseURL2, MODULE_NAME, TimeoutIncrementorBean.class.getSimpleName());
 
-        try (CloseableHttpClient client = TestHttpClientUtils.relaxedCookieHttpClient()) {
+        try (CloseableHttpClient client = TestHttpClientUtils.promiscuousCookieHttpClient()) {
             assertEquals(1, queryCount(client, uri1));
             assertEquals(2, queryCount(client, uri1));
 

@@ -76,7 +76,6 @@ public class CdiFailoverTestCase extends ClusterAbstractTestCase {
         WebArchive war = ShrinkWrap.create(WebArchive.class, MODULE_NAME + ".war");
         war.addClasses(Incrementor.class, CdiIncrementorBean.class, CdiServlet.class, IncrementorDecorator.class);
         war.setWebXML(CdiFailoverTestCase.class.getPackage(), "web.xml");
-        log.info(war.toString(true));
         return war;
     }
 
@@ -129,7 +128,7 @@ public class CdiFailoverTestCase extends ClusterAbstractTestCase {
         URI uri1 = CdiServlet.createURI(baseURL1);
         URI uri2 = CdiServlet.createURI(baseURL2);
 
-        try (CloseableHttpClient client = TestHttpClientUtils.relaxedCookieHttpClient()){
+        try (CloseableHttpClient client = TestHttpClientUtils.promiscuousCookieHttpClient()){
             assertEquals(1, queryCount(client, uri1));
             assertEquals(2, queryCount(client, uri1));
 

@@ -39,6 +39,7 @@ import org.jboss.as.controller.PathElement;
 import org.jboss.as.controller.descriptions.ModelDescriptionConstants;
 import org.jboss.as.controller.operations.common.Util;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
+import org.jboss.as.controller.registry.Resource;
 import org.jboss.as.controller.transform.description.ResourceTransformationDescriptionBuilder;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.Property;
@@ -87,10 +88,25 @@ public class MixedKeyedJDBCStoreResourceDefinition extends JDBCStoreResourceDefi
     }
 
     @Override
-    public void registerOperations(final ManagementResourceRegistration registration) {
-        ResourceDescriptor descriptor = new ResourceDescriptor(this.getResourceDescriptionResolver()).addAttributes(JDBCStoreResourceDefinition.Attribute.class).addAttributes(StoreResourceDefinition.Attribute.class);
+    public void register(ManagementResourceRegistration parentRegistration) {
+        ManagementResourceRegistration registration = parentRegistration.registerSubModel(this);
+        parentRegistration.registerAlias(LEGACY_PATH, new SimpleAliasEntry(registration));
+
+        ResourceDescriptor descriptor = new ResourceDescriptor(this.getResourceDescriptionResolver())
+                .addAttributes(JDBCStoreResourceDefinition.Attribute.class)
+                .addAttributes(StoreResourceDefinition.Attribute.class)
+                .addExtraParameters(DeprecatedAttribute.class)
+                .addExtraParameters(JDBCStoreResourceDefinition.DeprecatedAttribute.class)
+                .addCapabilities(Capability.class)
+                ;
         ResourceServiceHandler handler = new SimpleResourceServiceHandler<>(new MixedKeyedJDBCStoreBuilderFactory());
         new AddStepHandler(descriptor, handler) {
+            @Override
+            protected void populateModel(OperationContext context, ModelNode operation, Resource resource) throws OperationFailedException {
+                translateAddOperation(context, operation);
+                super.populateModel(context, operation, resource);
+            }
+
             @Override
             public void execute(OperationContext context, ModelNode operation) throws OperationFailedException {
                 super.execute(context, operation);
@@ -112,24 +128,13 @@ public class MixedKeyedJDBCStoreResourceDefinition extends JDBCStoreResourceDefi
             }
         }.register(registration);
         new RemoveStepHandler(descriptor, handler).register(registration);
-    }
 
-    @Override
-    public void registerChildren(ManagementResourceRegistration registration) {
-        super.registerChildren(registration);
-        new BinaryTableResourceDefinition().register(registration);
-        new StringTableResourceDefinition().register(registration);
-    }
-
-    @Override
-    public void registerAttributes(ManagementResourceRegistration registration) {
-        super.registerAttributes(registration);
         registration.registerReadWriteAttribute(DeprecatedAttribute.BINARY_TABLE.getDefinition(), BinaryKeyedJDBCStoreResourceDefinition.LEGACY_READ_TABLE_HANDLER, BinaryKeyedJDBCStoreResourceDefinition.LEGACY_WRITE_TABLE_HANDLER);
         registration.registerReadWriteAttribute(DeprecatedAttribute.STRING_TABLE.getDefinition(), StringKeyedJDBCStoreResourceDefinition.LEGACY_READ_TABLE_HANDLER, StringKeyedJDBCStoreResourceDefinition.LEGACY_WRITE_TABLE_HANDLER);
-    }
 
-    @Override
-    public void register(ManagementResourceRegistration registration) {
-        registration.registerAlias(LEGACY_PATH, new SimpleAliasEntry(registration.registerSubModel(this)));
+        new BinaryTableResourceDefinition().register(registration);
+        new StringTableResourceDefinition().register(registration);
+
+        super.register(registration);
     }
 }

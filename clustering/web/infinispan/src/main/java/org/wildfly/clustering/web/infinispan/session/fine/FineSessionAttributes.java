@@ -22,9 +22,11 @@
 package org.wildfly.clustering.web.infinispan.session.fine;
 
 import org.infinispan.Cache;
+import org.infinispan.commons.marshall.NotSerializableException;
 import org.infinispan.context.Flag;
 import org.wildfly.clustering.ee.infinispan.CacheEntryMutator;
-import org.wildfly.clustering.marshalling.Marshaller;
+import org.wildfly.clustering.marshalling.jboss.Marshaller;
+import org.wildfly.clustering.marshalling.jboss.MarshallingContext;
 import org.wildfly.clustering.web.infinispan.session.MutableDetector;
 import org.wildfly.clustering.web.session.SessionAttributes;
 
@@ -33,10 +35,10 @@ import org.wildfly.clustering.web.session.SessionAttributes;
  * @author Paul Ferraro
  */
 public class FineSessionAttributes<V> extends FineImmutableSessionAttributes<V> implements SessionAttributes {
-    private final Cache<SessionAttributeCacheKey, V> cache;
-    private final Marshaller<Object, V> marshaller;
+    private final Cache<SessionAttributeKey, V> cache;
+    private final Marshaller<Object, V, MarshallingContext> marshaller;
 
-    public FineSessionAttributes(String id, Cache<SessionAttributeCacheKey, V> attributeCache, Marshaller<Object, V> marshaller) {
+    public FineSessionAttributes(String id, Cache<SessionAttributeKey, V> attributeCache, Marshaller<Object, V, MarshallingContext> marshaller) {
         super(id, attributeCache, marshaller);
         this.cache = attributeCache;
         this.marshaller = marshaller;
@@ -44,7 +46,7 @@ public class FineSessionAttributes<V> extends FineImmutableSessionAttributes<V> 
 
     @Override
     public Object removeAttribute(String name) {
-        SessionAttributeCacheKey key = this.createKey(name);
+        SessionAttributeKey key = this.createKey(name);
         return this.read(name, this.cache.getAdvancedCache().withFlags(Flag.FORCE_SYNCHRONOUS).remove(key));
     }
 
@@ -53,14 +55,17 @@ public class FineSessionAttributes<V> extends FineImmutableSessionAttributes<V> 
         if (attribute == null) {
             return this.removeAttribute(name);
         }
-        SessionAttributeCacheKey key = this.createKey(name);
+        if (!this.marshaller.getContext().isMarshallable(attribute)) {
+            throw new IllegalArgumentException(new NotSerializableException(attribute.getClass().getName()));
+        }
+        SessionAttributeKey key = this.createKey(name);
         V value = this.marshaller.write(attribute);
         return this.read(name, this.cache.getAdvancedCache().withFlags(Flag.FORCE_SYNCHRONOUS).put(key, value));
     }
 
     @Override
     public Object getAttribute(String name) {
-        SessionAttributeCacheKey key = this.createKey(name);
+        SessionAttributeKey key = this.createKey(name);
         V value = this.cache.get(key);
         Object attribute = this.read(name, value);
         if (attribute != null) {

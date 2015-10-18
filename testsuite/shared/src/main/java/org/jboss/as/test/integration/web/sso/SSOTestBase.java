@@ -84,7 +84,7 @@ public abstract class SSOTestBase {
 
         // Start by accessing the secured index.html of war1
         CookieStore store = new BasicCookieStore();
-        HttpClient httpclient = TestHttpClientUtils.relaxedCookieHttpClientBuilder()
+        HttpClient httpclient = TestHttpClientUtils.promiscuousCookieHttpClientBuilder()
                 .setDefaultCookieStore(store)
                 .disableRedirectHandling()
                 .build();
@@ -134,7 +134,7 @@ public abstract class SSOTestBase {
 
         // Start by accessing the secured index.html of war1
         CookieStore store = new BasicCookieStore();
-        HttpClient httpclient = TestHttpClientUtils.relaxedCookieHttpClientBuilder().setDefaultCookieStore(store).build();
+        HttpClient httpclient = TestHttpClientUtils.promiscuousCookieHttpClientBuilder().setDefaultCookieStore(store).build();
         try {
             checkAccessDenied(httpclient, warA1 + "index.html");
 
@@ -359,7 +359,7 @@ public abstract class SSOTestBase {
 
     public static void applyUpdates(final List<ModelNode> updates, final ModelControllerClient client) throws Exception {
         for (ModelNode update : updates) {
-            log.info("+++ Update on " + client + ":\n" + update.toString());
+            //log.info("+++ Update on " + client + ":\n" + update.toString());
             ModelNode result = client.execute(new OperationBuilder(update).build());
             if (result.hasDefined("outcome") && "success".equals(result.get("outcome").asString())) {
                 if (result.hasDefined("result"))

@@ -95,7 +95,6 @@ public class StatefulFailoverTestCase extends ClusterAbstractTestCase {
                 "<decorators><class>" + CounterDecorator.class.getName() + "</class></decorators>" +
                 "</beans>"), "beans.xml");
         war.addAsResource(PersistenceIncrementorBean.class.getPackage(), "persistence.xml", "/META-INF/persistence.xml");
-        log.info(war.toString(true));
         return war;
     }
 
@@ -110,7 +109,7 @@ public class StatefulFailoverTestCase extends ClusterAbstractTestCase {
         URI uri1 = StatefulServlet.createURI(baseURL1, MODULE_NAME, PassivationIncapableIncrementorBean.class.getSimpleName());
         URI uri2 = StatefulServlet.createURI(baseURL2, MODULE_NAME, PassivationIncapableIncrementorBean.class.getSimpleName());
 
-        try (CloseableHttpClient client = TestHttpClientUtils.relaxedCookieHttpClient()) {
+        try (CloseableHttpClient client = TestHttpClientUtils.promiscuousCookieHttpClient()) {
             assertEquals(1, queryCount(client, uri1));
             assertEquals(2, queryCount(client, uri1));
 
@@ -186,7 +185,7 @@ public class StatefulFailoverTestCase extends ClusterAbstractTestCase {
         URI uri1 = StatefulServlet.createURI(baseURL1, MODULE_NAME, beanClass.getSimpleName());
         URI uri2 = StatefulServlet.createURI(baseURL2, MODULE_NAME, beanClass.getSimpleName());
 
-        try (CloseableHttpClient client = TestHttpClientUtils.relaxedCookieHttpClient()) {
+        try (CloseableHttpClient client = TestHttpClientUtils.promiscuousCookieHttpClient()) {
             assertEquals(1, queryCount(client, uri1));
             assertEquals(2, queryCount(client, uri1));
 
@@ -232,7 +231,7 @@ public class StatefulFailoverTestCase extends ClusterAbstractTestCase {
         URI uri1 = StatefulServlet.createURI(baseURL1, MODULE_NAME, SimpleIncrementorBean.class.getSimpleName());
         URI uri2 = StatefulServlet.createURI(baseURL2, MODULE_NAME, SimpleIncrementorBean.class.getSimpleName());
 
-        try (CloseableHttpClient client = TestHttpClientUtils.relaxedCookieHttpClient()) {
+        try (CloseableHttpClient client = TestHttpClientUtils.promiscuousCookieHttpClient()) {
             assertEquals(1, queryCount(client, uri1));
             assertEquals(2, queryCount(client, uri1));
 
@@ -279,7 +278,7 @@ public class StatefulFailoverTestCase extends ClusterAbstractTestCase {
         URI uri1 = StatefulServlet.createURI(baseURL1, MODULE_NAME, NestedIncrementorBean.class.getSimpleName());
         URI uri2 = StatefulServlet.createURI(baseURL2, MODULE_NAME, NestedIncrementorBean.class.getSimpleName());
 
-        try (CloseableHttpClient client = TestHttpClientUtils.relaxedCookieHttpClient()) {
+        try (CloseableHttpClient client = TestHttpClientUtils.promiscuousCookieHttpClient()) {
             assertEquals(20010101, queryCount(client, uri1));
             assertEquals(20020202, queryCount(client, uri1));
 

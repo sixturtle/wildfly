@@ -84,7 +84,6 @@ public class FormAuthenticationWebFailoverTestCase extends ClusterAbstractTestCa
         war.addAsResource(SecureServlet.class.getPackage(), "roles.properties", "roles.properties");
         war.addAsWebResource(SecureServlet.class.getPackage(), "login.html", "login.html");
         war.addAsWebResource(SecureServlet.class.getPackage(), "error.html", "error.html");
-        log.info(war.toString(true));
         return war;
     }
 
@@ -97,7 +96,7 @@ public class FormAuthenticationWebFailoverTestCase extends ClusterAbstractTestCa
         URI uri1 = SecureServlet.createURI(baseURL1);
         URI uri2 = SecureServlet.createURI(baseURL2);
 
-        try (CloseableHttpClient client = TestHttpClientUtils.relaxedCookieHttpClient()) {
+        try (CloseableHttpClient client = TestHttpClientUtils.promiscuousCookieHttpClient()) {
             System.out.println(uri1);
             HttpResponse response = client.execute(new HttpGet(uri1));
             try {

@@ -811,4 +811,13 @@ public interface MessagingLogger extends BasicLogger {
 
     @Message(id = 82, value = "Classes providing the %s are discarded during the migration. To use them in the new messaging-activemq subsystem, you will have to extend the Artemis-based Interceptor.")
     String couldNotMigrateInterceptors(String legacyInterceptorsAttributeName);
+
+    @Message(id = 83, value = "Could not migrate the HA configuration of %s. Its shared-store and backup attributes holds expressions and it is not possible to determine unambiguously how to create the corresponding ha-policy for the messaging-activemq's server.")
+    String couldNotMigrateHA(PathAddress address);
+
+    @Message(id = 84, value = "Could not migrate attribute %s from resource %s. Use instead the socket-attribute to configure this discovery-group.")
+    String couldNotMigrateDiscoveryGroupAttribute(String attribute, PathAddress address);
+
+    @Message(id = 85, value = "Could not create a legacy-connection-factory based on connection-factory %s. It used a HornetQ in-vm connector that is not compatible with Artemis in-vm connector ")
+    String couldNotCreateLegacyConnectionFactoryUsingInVMConnector(PathAddress address);
 }

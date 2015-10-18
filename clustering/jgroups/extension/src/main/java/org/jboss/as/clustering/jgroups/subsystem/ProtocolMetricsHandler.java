@@ -241,7 +241,6 @@ public class ProtocolMetricsHandler extends AbstractRuntimeOnlyHandler {
     protected void executeRuntimeStep(final OperationContext context, ModelNode operation) throws OperationFailedException {
 
         PathAddress address = context.getCurrentAddress();
-        String protocolName = context.getCurrentAddressValue();
         String name = Operations.getAttributeName(operation);
 
         try {
@@ -263,8 +262,6 @@ public class ProtocolMetricsHandler extends AbstractRuntimeOnlyHandler {
                 } else {
                     context.getFailureDescription().set(JGroupsLogger.ROOT_LOGGER.unknownMetric(name));
                 }
-            } else {
-                context.getFailureDescription().set(JGroupsLogger.ROOT_LOGGER.protocolNotFoundInStack(protocolName));
             }
         } catch (ClassNotFoundException | ModuleLoadException e) {
             context.getFailureDescription().set(e.getLocalizedMessage());

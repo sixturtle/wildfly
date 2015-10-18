@@ -62,7 +62,6 @@ public class SimpleWebTestCase {
         WebArchive war = ShrinkWrap.create(WebArchive.class, "distributable.war");
         war.addClasses(SimpleServlet.class, Mutable.class);
         war.setWebXML(SimpleWebTestCase.class.getPackage(), "web.xml");
-        log.info(war.toString(true));
         return war;
     }
 
@@ -72,7 +71,7 @@ public class SimpleWebTestCase {
 
         URI uri = SimpleServlet.createURI(baseURL);
 
-        try (CloseableHttpClient client = TestHttpClientUtils.relaxedCookieHttpClient()) {
+        try (CloseableHttpClient client = TestHttpClientUtils.promiscuousCookieHttpClient()) {
             HttpResponse response = client.execute(new HttpGet(uri));
             try {
                 Assert.assertEquals(HttpServletResponse.SC_OK, response.getStatusLine().getStatusCode());

@@ -79,7 +79,6 @@ public class InvalidateConversationTestCase extends ClusterAbstractTestCase {
         ClusterTestUtil.addTopologyListenerDependencies(war);
         war.addClasses(ConversationServlet.class, ConversationBean.class, LogoutServlet.class);
         war.setWebXML(ClusteredWebSimpleTestCase.class.getPackage(), "web.xml");
-        log.info(war.toString(true));
         return war;
     }
 
@@ -93,7 +92,7 @@ public class InvalidateConversationTestCase extends ClusterAbstractTestCase {
 
         establishTopology(baseURL1, NODES);
 
-        try (CloseableHttpClient client = TestHttpClientUtils.relaxedCookieHttpClient()) {
+        try (CloseableHttpClient client = TestHttpClientUtils.promiscuousCookieHttpClient()) {
             HttpResponse response = client.execute(new HttpGet(ConversationServlet.createURI(baseURL1)));
             try {
                 assertEquals(HttpServletResponse.SC_OK, response.getStatusLine().getStatusCode());
