@@ -149,6 +149,7 @@
         <version.org.hibernate.search>5.5.0.Final</version.org.hibernate.search>
         <version.org.hornetq>2.4.7.Final</version.org.hornetq>
         <version.org.infinispan>8.0.1.Final</version.org.infinispan>
+        <version.org.infinispan.cachestore.redis>8.0.0.Final</version.org.infinispan.cachestore.redis>
         <version.redis.clients.jedis>2.7.3</version.redis.clients.jedis>
         <version.org.jasypt>1.9.1</version.org.jasypt>
         <version.org.javassist>3.18.1-GA</version.org.javassist>
@@ -4096,7 +4097,7 @@
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-cachestore-redis</artifactId>
-                <version>${version.org.infinispan}</version>
+                <version>${version.org.infinispan.cachestore.redis}</version>
             </dependency>
             <dependency>
                 <groupId>redis.clients</groupId>
